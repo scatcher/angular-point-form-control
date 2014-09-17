@@ -1,0 +1,9 @@
+<select ui-select2
+        multiple
+        ng-model="state.placeholderValue"
+        ng-change="updateMultiModel()"
+        ng-disabled="ngDisabled"
+        class="form-control">
+    <option ng-repeat="lookup in lookupOptions" value="{{ lookup.id }}"
+            ng-bind="lookup[state.lookupField]">&nbsp;</option>
+</select>

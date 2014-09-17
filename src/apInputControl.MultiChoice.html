@@ -1,0 +1,9 @@
+<select ui-select2
+        multiple="true"
+        ng-model="entity[fieldName]"
+        class="form-control">
+    <option value=""></option>
+    <option ng-repeat="choice in fieldDefinition.Choices" value="{{choice}}">
+        {{choice}}
+    </option>
+</select>

@@ -1,0 +1,9 @@
+<div class="col-md-{{cols}}">
+    <div class="form-group" title="{{description}}" ng-class="{'has-error': $form[fieldName].$invalid}">
+        <label>{{ label }}</label>
+
+        <div ng-include="contentUrl"
+             ng-disabled="ngDisabled"></div>
+        <!--<p class="help-text">{{ description}}</p>-->
+    </div>
+</div>
