@@ -28,7 +28,7 @@ angular.module('RTM')
             },
             restrict: 'A',
             transclude: true,
-            templateUrl: 'scripts/directives/ap_input/apInputGroup.html',
+            templateUrl: 'src/apInputGroup.html',
             link: function (scope, elem, attr) {
 
                 if (!_.isString(scope.fieldName)) {
@@ -49,22 +49,22 @@ angular.module('RTM')
                 scope.validation = scope.fieldDefinition.validation || validation;
 
                 /** Default input type is text */
-                scope.contentUrl = 'scripts/directives/ap_input/apInputControl.Text.html';
+                scope.contentUrl = 'src/apInputControl.Text.html';
 
                 /** Optionally choose alternative templates based on type */
                 switch (scope.fieldDefinition.objectType) {
                     case 'Boolean':
-                        scope.contentUrl = 'scripts/directives/ap_input/apInputControl.Boolean.html';
+                        scope.contentUrl = 'src/apInputControl.Boolean.html';
                         break;
                     case 'Choice':
-                        scope.contentUrl = 'scripts/directives/ap_input/apInputControl.Choice.html';
+                        scope.contentUrl = 'src/apInputControl.Choice.html';
                         break;
                     case 'DateTime':
 //                        scope.entity[scope.fieldName] = scope.entity[scope.fieldName] || null;
-                        scope.contentUrl = 'scripts/directives/ap_input/apInputControl.Date.html';
+                        scope.contentUrl = 'src/apInputControl.Date.html';
                         break;
                     case 'HTML':
-                        scope.contentUrl = 'scripts/directives/ap_input/apInputControl.HTML.html';
+                        scope.contentUrl = 'src/apInputControl.HTML.html';
                         scope.cols = 12;
                         break;
                     case 'Integer':
@@ -72,20 +72,20 @@ angular.module('RTM')
                         break;
                     case 'Lookup':
                         initializeSingleLookup();
-                        scope.contentUrl = 'scripts/directives/ap_input/apInputControl.Lookup.html';
+                        scope.contentUrl = 'src/apInputControl.Lookup.html';
                         break;
                     case 'LookupMulti':
                         initializeMultiLookup();
-                        scope.contentUrl = 'scripts/directives/ap_input/apInputControl.LookupMulti.html';
+                        scope.contentUrl = 'src/apInputControl.LookupMulti.html';
                         break;
                     case 'MultiChoice':
-                        scope.contentUrl = 'scripts/directives/ap_input/apInputControl.MultiChoice.html';
+                        scope.contentUrl = 'src/apInputControl.MultiChoice.html';
                         scope.entity[scope.fieldName] = scope.entity[scope.fieldName] || [];
                         break;
                     case 'Note':
                         scope.rows = scope.rows || scope.fieldDefinition.rows || 6;
                         scope.cols = 12;
-                        scope.contentUrl = 'scripts/directives/ap_input/apInputControl.Note.html';
+                        scope.contentUrl = 'src/apInputControl.Note.html';
                         break;
                 }
 
