@@ -1,20 +1,20 @@
 {
     "name": "angular-point-form-control",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "homepage": "https://github.com/scatcher/angular-point-form-control",
     "authors": [
         "Scott Hatcher <scott@hatcher.solutions>"
     ],
     "description": "A directive built to simplify angular-point form controls.",
-    "main": "dist/apInputControl.js",
+    "main": "dist/apInputControl.min.js",
     "dependencies": {
         "angular": "~1.2",
-        "angular-toastr": "latest",
+        "angular-point": "^1.0.0",
+        "angular-toastr": "^0.4.0",
         "angular-ui-select2": "~0.0.5",
         "jquery": "~1.11",
         "lodash": "^2.4",
         "lodash-deep": "^1.1",
-        "angular-point": "latest",
         "bootstrap": "^3.2.0"
     },
     "devDependencies": {

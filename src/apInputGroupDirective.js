@@ -33,7 +33,7 @@ angular.module('RTM')
 
                 if (!_.isString(scope.fieldName)) {
                     throw new Error('Field name is either undefined or not a string.  Ensure you place apostrophe\'s' +
-                        ' inside the quotes when identifying data-field-name.');
+                    ' inside the quotes when identifying data-field-name.');
                 }
 
                 scope.fieldDefinition = scope.fieldDefinition || getFieldDefinition(scope.entity, scope.fieldName);
