@@ -11,7 +11,7 @@
  * */
 
 
-angular.module('RTM')
+angular.module('angularPoint')
     .directive('apInputGroup', ["_", "apCacheService", function (_, apCacheService) {
         return {
             scope: {
@@ -178,7 +178,7 @@ angular.module('RTM')
 
 
 angular.module('RTM')
-    .directive('apInputRow', ["_", function (_) {
+    .directive('angularPoint', ["_", function (_) {
         return {
             ngDisabled: '=',     //Pass through to disable control using ng-disabled on element if set
             scope: {

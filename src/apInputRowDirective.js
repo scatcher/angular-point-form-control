@@ -10,7 +10,7 @@
 
 
 angular.module('RTM')
-    .directive('apInputRow', function (_) {
+    .directive('angularPoint', function (_) {
         return {
             ngDisabled: '=',     //Pass through to disable control using ng-disabled on element if set
             scope: {

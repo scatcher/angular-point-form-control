@@ -11,7 +11,7 @@
  * */
 
 
-angular.module('RTM')
+angular.module('angularPoint')
     .directive('apInputGroup', function (_, apCacheService) {
         return {
             scope: {
