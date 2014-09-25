@@ -114,8 +114,10 @@ angular.module('angularPoint')
                  */
                 function evaluateColumnWidth() {
                     var cols = scope.cols || fieldDefinition.cols || 3;
-                    if(_.isFunction(cols) && col() !== scope.columns) {
+                    if(_.isFunction(cols) && cols() !== scope.columns) {
                         scope.columns = cols();
+                    } else {
+                        scope.columns = cols;
                     }
                 }
 
