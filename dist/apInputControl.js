@@ -61,7 +61,7 @@ angular.module('angularPoint')
                 evaluateColumnWidth();
 
                 if(_.isFunction(scope.cols)) {
-                    scope.$watch(function (oldVal, newVal) {
+                    scope.$watch('entity.' + scope.fieldName, function (oldVal, newVal) {
                         evaluateColumnWidth();
                         console.log('Scope change detected.');
                     });
