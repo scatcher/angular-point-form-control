@@ -4,11 +4,34 @@
 </div>
 </h1>
 <div><h2 id="description">Description</h2>
-<div class="description"><div class="angular-point-directive-page angular-point-directive-apinputgroup-page"><p><em>Please update the description and restriction.</em></p>
+<div class="description"><div class="angular-point-directive-page angular-point-directive-apinputgroup-page"><p>Creates individual form controls for each of the field names provided.</p>
 </div></div>
 <h2 id="usage">Usage</h2>
-<div class="usage">as attribute<pre class="prettyprint linenums">&lt;ANY ap-input-group&gt;
+<div class="usage">as attribute<pre class="prettyprint linenums">&lt;ANY ap-input-group
+     cols="{function|number}"
+     description="{string}"
+     field-definition="{object}"
+     [field-definition.-choices]="{string[]}"
+     [field-definition.label]="{string}"
+     [field-definition.object-type]="{string}"
+     field-name="{string}"
+     entity="{object}"
+     [label]="{string}"
+     ng-disabled="{boolean}"
+     [validation]="{function}"&gt;
    ...
 &lt;/ANY&gt;</pre>
-</div>
+<h4 id="usage_parameters">Parameters</h4><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>cols</td><td><a href="" class="label type-hint type-hint-function">function</a><a href="" class="label type-hint type-hint-number">number</a></td><td><div class="angular-point-directive-page angular-point-directive-apinputgroup-page"><p>Column width in a 12 column layout.</p>
+</div> <p><em>(default: 3)</em></p></td></tr><tr><td>description</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="angular-point-directive-page angular-point-directive-apinputgroup-page"><p>Optional description text.</p>
+</div> <p><em>(default: '')</em></p></td></tr><tr><td>fieldDefinition</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="angular-point-directive-page angular-point-directive-apinputgroup-page"><p>Optionally override the field definition stored in the
+model with a custom field definition.</p>
+</div> <p><em>(default: {Definition from model})</em></p></td></tr><tr><td>[fieldDefinition.Choices]</td><td><a href="" class="label type-hint type-hint-string">string[]</a></td><td><div class="angular-point-directive-page angular-point-directive-apinputgroup-page"><p>Choices to appear in dropdown.</p>
+</div></td></tr><tr><td>[fieldDefinition.label]</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="angular-point-directive-page angular-point-directive-apinputgroup-page"><p>Label for the input.</p>
+</div></td></tr><tr><td>[fieldDefinition.objectType]</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="angular-point-directive-page angular-point-directive-apinputgroup-page"><p>One of the valid SharePoint field types.</p>
+</div></td></tr><tr><td>fieldName</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="angular-point-directive-page angular-point-directive-apinputgroup-page"><p>The name of the property on the entity to bind to.</p>
+</div></td></tr><tr><td>entity</td><td><a href="" class="label type-hint type-hint-object">object</a></td><td><div class="angular-point-directive-page angular-point-directive-apinputgroup-page"><p>SharePoint list item.</p>
+</div></td></tr><tr><td>[label]</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="angular-point-directive-page angular-point-directive-apinputgroup-page"><p>Label for the input.</p>
+</div></td></tr><tr><td>ngDisabled</td><td><a href="" class="label type-hint type-hint-boolean">boolean</a></td><td><div class="angular-point-directive-page angular-point-directive-apinputgroup-page"><p>Pass through to disable control using ng-disabled on element if set.</p>
+</div> <p><em>(default: false)</em></p></td></tr><tr><td>[validation]</td><td><a href="" class="label type-hint type-hint-function">function</a></td><td><div class="angular-point-directive-page angular-point-directive-apinputgroup-page"><p>Allow you to pass in validation logic.</p>
+</div></td></tr></tbody></table></div>
 </div>
