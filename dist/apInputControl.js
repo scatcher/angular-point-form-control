@@ -289,7 +289,7 @@ angular.module('angularPoint')
 
 
   $templateCache.put('src/apInputRow.html',
-    "<div class=\"{{ state.rowClass }}\"><div ng-repeat=\"fieldName in fieldNameArray\" ap-input-group data-entity=entity data-field-name=fieldName></div></div>"
+    "<div class=\"{{ state.containerClass }}\"><div ng-repeat=\"fieldName in fieldNameArray\" ap-input-group data-entity=entity data-field-name=fieldName></div></div>"
   );
 
 }]);
