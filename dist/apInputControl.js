@@ -44,9 +44,9 @@ angular.module('angularPoint')
                 }
 
                 var fieldDefinition = scope.fieldDefinition || getFieldDefinition(scope.entity, scope.fieldName);
-                var validation = fieldDefinition.validation || validation;
 
                 var state = {
+                    columns: 3,
                     description: scope.description || fieldDefinition.Description || null,
                     label: scope.label || fieldDefinition.label || fieldDefinition.DisplayName,
                     lookupField: 'title',
@@ -56,7 +56,7 @@ angular.module('angularPoint')
                 /** Expose to templates */
                 scope.state = state;
                 scope.fieldDefinition = fieldDefinition;
-                scope.validation = validation;
+                scope.validation = fieldDefinition.validation || validation;
 
                 evaluateColumnWidth();
 
@@ -116,10 +116,10 @@ angular.module('angularPoint')
                  */
                 function evaluateColumnWidth() {
                     var cols = scope.cols || fieldDefinition.cols || 3;
-                    if(_.isFunction(cols) && cols() !== scope.columns) {
-                        scope.columns = cols();
+                    if(_.isFunction(cols)) {
+                        state.columns = cols();
                     } else {
-                        scope.columns = cols;
+                        state.columns = cols;
                     }
                 }
 
@@ -284,7 +284,7 @@ angular.module('angularPoint')
 
 
   $templateCache.put('src/apInputGroup.html',
-    "<div class=col-md-{{columns}}><div class=form-group title={{state.description}} ng-class=\"{'has-error': $form[fieldName].$invalid}\"><label>{{ state.label }}</label><div ng-include=contentUrl ng-disabled=ngDisabled></div></div></div>"
+    "<div class=col-md-{{state.columns}}><div class=form-group title={{state.description}} ng-class=\"{'has-error': $form[fieldName].$invalid}\"><label>{{ state.label }}</label><div ng-include=contentUrl ng-disabled=ngDisabled></div></div></div>"
   );
 
 
