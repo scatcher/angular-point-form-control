@@ -13,6 +13,7 @@
  * @param {string} [fieldDefinition.label] Label for the input.
  * @param {string} [fieldDefinition.objectType] One of the valid SharePoint field types.
  * @param {string} fieldName The name of the property on the entity to bind to.
+ * @param {string} [groupClass="col-md-3"] Class to use for the containing element.
  * @param {object} entity SharePoint list item.
  * @param {string} [label] Label for the input.
  * @param {boolean} [ngDisabled=false] Pass through to disable control using ng-disabled on element if set.
@@ -26,9 +27,10 @@ angular.module('angularPoint')
                 /** Optionally specify the number of columns for this form group directly instead of using model */
                 cols: '=?',
                 description: '=?',
+                entity: '=',
                 fieldDefinition: '=?',
                 fieldName: '=',
-                entity: '=',
+                groupClass: '=',
                 label: '=?',
                 ngDisabled: '=',
                 validation: '=?'
@@ -58,11 +60,9 @@ angular.module('angularPoint')
                 scope.fieldDefinition = fieldDefinition;
                 scope.validation = fieldDefinition.validation || validation;
 
-                evaluateColumnWidth();
-
-                if(_.isFunction(scope.cols)) {
+                if (_.isFunction(scope.cols)) {
                     scope.$watch('entity.' + scope.fieldName, function (oldVal, newVal) {
-                        evaluateColumnWidth();
+                        evaluateContainerClass();
                         console.log('Scope change detected.');
                     });
                 }
@@ -110,17 +110,26 @@ angular.module('angularPoint')
                         scope.contentUrl = 'src/apInputControl.Text.html';
                 }
 
+                return evaluateContainerClass();
+
+                /**======================PRIVATE============================*/
+
                 /**
                  * @description
                  * Allows us to pass in a function to dynamically size the input group.
                  */
-                function evaluateColumnWidth() {
-                    var cols = scope.cols || fieldDefinition.cols || 3;
-                    if(_.isFunction(cols)) {
-                        state.columns = cols();
+                function evaluateContainerClass() {
+                    var groupClass = scope.groupClass || buildColumnBasedClass();
+                    if (_.isFunction(groupClass)) {
+                        state.groupClass = groupClass();
                     } else {
-                        state.columns = cols;
+                        state.groupClass = groupClass;
                     }
+                }
+
+                function buildColumnBasedClass() {
+                    var cols = scope.cols || fieldDefinition.cols || 3;
+                    return 'col-md-' + cols;
                 }
 
                 function getLookupOptions(entity) {

@@ -1,6 +1,6 @@
 {
     "name": "angular-point-form-control",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "description": "A directive built to simplify angular-point form controls.",
     "main": "dist/apInputControl.min.js",
     "directories": {
