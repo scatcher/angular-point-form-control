@@ -67,6 +67,9 @@ angular.module('angularPoint')
                     });
                 }
 
+                /** Default input type is text */
+                scope.contentUrl = 'src/apInputControl.Text.html';
+
                 /** Optionally choose alternative templates based on type */
                 switch (fieldDefinition.objectType) {
                     case 'Boolean':
@@ -104,7 +107,6 @@ angular.module('angularPoint')
                         scope.contentUrl = 'src/apInputControl.Note.html';
                         break;
                     default:
-                        /** Default input type is text */
                         scope.contentUrl = 'src/apInputControl.Text.html';
                 }
 

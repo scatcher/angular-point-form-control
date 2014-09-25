@@ -238,6 +238,7 @@ module.exports = function (grunt) {
         'concat',
         'ngAnnotate',
         'uglify',
+        'bump',
         'doc'
     ]);
 
