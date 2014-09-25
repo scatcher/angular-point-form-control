@@ -1,12 +1,4 @@
-<!--<div class="row">-->
-<!--<div ng-repeat="fieldName in fieldNameArray" class="col-sm-{{getNumberOfColumns(fieldName)}}">-->
-<!--<span ap-input-group-->
-<!--data-entity="entity"-->
-<!--data-field-definition="getFieldDefinition(fieldName)"-->
-<!--data-field-name="fieldName" ></span>-->
-<!--</div>-->
-<!--</div>-->
-<div class="row">
+<div class="{{ state.rowClass }}">
     <div ng-repeat="fieldName in fieldNameArray"
          ap-input-group
          data-entity="entity"

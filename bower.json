@@ -1,6 +1,6 @@
 {
     "name": "angular-point-form-control",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "homepage": "https://github.com/scatcher/angular-point-form-control",
     "authors": [
         "Scott Hatcher <scott@hatcher.solutions>"
@@ -14,13 +14,11 @@
         "angular-ui-select2": "~0.0.5",
         "jquery": "~1.11",
         "lodash": "^2.4",
-        "lodash-deep": "^1.1",
         "bootstrap": "^3.2.0"
     },
     "devDependencies": {
         "angular-sanitize": "~1.2",
         "angular-mocks": "~1.2",
-        "angular-resource": "~1.2",
         "angular-bootstrap": "^0.11"
     },
     "keywords": [

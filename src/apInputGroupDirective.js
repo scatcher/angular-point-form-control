@@ -3,15 +3,23 @@
 /**
  * @ngdoc directive
  * @name angular-point.directive:apInputGroup
- *
  * @description
- * _Please update the description and restriction._
- *
+ * Creates individual form controls for each of the field names provided.
+ * @param {function|number} [cols=3] Column width in a 12 column layout.
+ * @param {string} [description=''] Optional description text.
+ * @param {object} [fieldDefinition={Definition from model}] Optionally override the field definition stored in the
+ * model with a custom field definition.
+ * @param {string[]} [fieldDefinition.Choices] Choices to appear in dropdown.
+ * @param {string} [fieldDefinition.label] Label for the input.
+ * @param {string} [fieldDefinition.objectType] One of the valid SharePoint field types.
+ * @param {string} fieldName The name of the property on the entity to bind to.
+ * @param {object} entity SharePoint list item.
+ * @param {string} [label] Label for the input.
+ * @param {boolean} [ngDisabled=false] Pass through to disable control using ng-disabled on element if set.
+ * @param {function} [validation] Allow you to pass in validation logic.
  * @restrict A
  * */
-
-
-angular.module('RTM')
+angular.module('angularPoint')
     .directive('apInputGroup', function (_, apCacheService) {
         return {
             scope: {
@@ -21,9 +29,8 @@ angular.module('RTM')
                 fieldDefinition: '=?',
                 fieldName: '=',
                 entity: '=',
-                /** Option to override the field group label */
                 label: '=?',
-                ngDisabled: '=',     //Pass through to disable control using ng-disabled on element if set
+                ngDisabled: '=',
                 validation: '=?'
             },
             restrict: 'A',
@@ -36,23 +43,32 @@ angular.module('RTM')
                     ' inside the quotes when identifying data-field-name.');
                 }
 
-                scope.fieldDefinition = scope.fieldDefinition || getFieldDefinition(scope.entity, scope.fieldName);
+                var fieldDefinition = scope.fieldDefinition || getFieldDefinition(scope.entity, scope.fieldName);
+                var validation = fieldDefinition.validation || validation;
 
-                scope.cols = scope.cols || scope.fieldDefinition.cols || 3;
-                scope.label = scope.label || scope.fieldDefinition.label || scope.fieldDefinition.DisplayName;
-                scope.description = scope.description || scope.fieldDefinition.Description || null;
-                scope.state = {
+                var state = {
+                    description: scope.description || fieldDefinition.Description || null,
+                    label: scope.label || fieldDefinition.label || fieldDefinition.DisplayName,
                     lookupField: 'title',
                     placeholderValue: null
                 };
 
-                scope.validation = scope.fieldDefinition.validation || validation;
+                /** Expose to templates */
+                scope.state = state;
+                scope.fieldDefinition = fieldDefinition;
+                scope.validation = validation;
 
-                /** Default input type is text */
-                scope.contentUrl = 'src/apInputControl.Text.html';
+                evaluateColumnWidth();
+
+                if(_.isFunction(scope.cols)) {
+                    scope.$watch(function (oldVal, newVal) {
+                        evaluateColumnWidth();
+                        console.log('Scope change detected.');
+                    });
+                }
 
                 /** Optionally choose alternative templates based on type */
-                switch (scope.fieldDefinition.objectType) {
+                switch (fieldDefinition.objectType) {
                     case 'Boolean':
                         scope.contentUrl = 'src/apInputControl.Boolean.html';
                         break;
@@ -83,19 +99,33 @@ angular.module('RTM')
                         scope.entity[scope.fieldName] = scope.entity[scope.fieldName] || [];
                         break;
                     case 'Note':
-                        scope.rows = scope.rows || scope.fieldDefinition.rows || 6;
+                        scope.rows = scope.rows || fieldDefinition.rows || 6;
                         scope.cols = 12;
                         scope.contentUrl = 'src/apInputControl.Note.html';
                         break;
+                    default:
+                        /** Default input type is text */
+                        scope.contentUrl = 'src/apInputControl.Text.html';
+                }
+
+                /**
+                 * @description
+                 * Allows us to pass in a function to dynamically size the input group.
+                 */
+                function evaluateColumnWidth() {
+                    var cols = scope.cols || fieldDefinition.cols || 3;
+                    if(_.isFunction(cols) && col() !== scope.columns) {
+                        scope.columns = cols();
+                    }
                 }
 
                 function getLookupOptions(entity) {
                     var lookupOptions = {};
-                    var lookupListGuid = scope.fieldDefinition.List;
+                    var lookupListGuid = fieldDefinition.List;
                     if (lookupListGuid) {
                         lookupOptions = apCacheService.getCachedEntities(lookupListGuid);
-                        if (_.isFunction(scope.fieldDefinition.lookupFilter)) {
-                            lookupOptions = scope.fieldDefinition.lookupFilter(entity, lookupOptions);
+                        if (_.isFunction(fieldDefinition.lookupFilter)) {
+                            lookupOptions = fieldDefinition.lookupFilter(entity, lookupOptions);
                         }
                     }
                     scope.lookupOptions = lookupOptions;
@@ -113,7 +143,7 @@ angular.module('RTM')
                 function buildLookupObject(stringId) {
                     var intID = parseInt(stringId, 10);
                     var match = scope.lookupOptions[intID];
-                    return {lookupId: intID, lookupValue: match[scope.state.lookupField]};
+                    return {lookupId: intID, lookupValue: match[state.lookupField]};
                 }
 
 
@@ -126,7 +156,7 @@ angular.module('RTM')
                     scope.$watch('entity.' + scope.fieldName, function () {
                         if (_.isObject(targetProperty) && targetProperty.lookupId) {
                             /** Set the selected id as string */
-                            scope.state.placeholderValue = targetProperty.lookupId;
+                            state.placeholderValue = targetProperty.lookupId;
                         }
                     });
                 }
@@ -147,7 +177,7 @@ angular.module('RTM')
                 function initializeMultiLookup() {
                     var targetProperty = scope.entity[scope.fieldName];
                     getLookupOptions(scope.entity);
-                    scope.state.placeholderValue = [];
+                    state.placeholderValue = [];
 
                     scope.updateMultipleSelectLookup = updateMultipleSelectLookup;
 
@@ -155,7 +185,7 @@ angular.module('RTM')
                         /**  Set the string version of id's to allow multi-select control to work properly */
                         _.each(targetProperty, function (selectedLookup) {
                             /** Push id as a string to match what Select2 is expecting */
-                            scope.state.placeholderValue.push(selectedLookup.lookupId.toString());
+                            state.placeholderValue.push(selectedLookup.lookupId.toString());
                         });
                     });
                 }
