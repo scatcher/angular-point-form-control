@@ -1,7 +1,8 @@
-<textarea ng-model="entity[fieldName]"
-          style="width:100%"
-          name="{{fieldName}}"
-          ng-disabled="disabled"
-          ui-validate="'validation($value)'"
-          class="form-conrol"
-          rows="{{rows}}"></textarea>
+<textarea ng-model="entity[options.fieldName]"
+          ui-validate="'validate($value)'"
+          class="form-control"
+          rows="{{options.rows}}"
+          ng-required="options.required"
+          ng-disabled="options.disabled"
+          placeholder="{{options.placeholder}}">
+</textarea>

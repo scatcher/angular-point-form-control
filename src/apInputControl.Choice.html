@@ -1,3 +1,6 @@
 <select class="form-control"
-        ng-model="entity[fieldName]"
-        ng-options="choice for choice in fieldDefinition.Choices"></select>
+        ng-required="options.required"
+        ng-disabled="options.disabled"
+        ng-model="entity[options.fieldName]"
+        ui-validate="'validate($value)'"
+        ng-options="choice for choice in options.Choices"></select>

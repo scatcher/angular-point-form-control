@@ -210,15 +210,19 @@ module.exports = function (grunt) {
                 createTag: false,
                 push: false
             }
+        },
+        copy: {
+            demo: {
+                src: '<%= config.dist %>/*.js',
+                dest: '<%= config.demo %>/bower_components/angular-point-form-control/'
+            }
         }
+
     });
 
-    grunt.registerTask('demo', function (target) {
+    grunt.registerTask('serve', function (target) {
         grunt.task.run([
             'clean:server',
-//            'bowerInstall',
-//      'copy:styles',
-//      'autoprefixer',
             'connect:livereload',
             'watch'
         ]);
@@ -240,6 +244,15 @@ module.exports = function (grunt) {
         'uglify',
         'bump',
         'doc'
+    ]);
+
+    grunt.registerTask('demo-build', [
+        'clean:dist',
+        'ngtemplates',
+        'concat',
+        'ngAnnotate',
+        'uglify',
+        'copy:demo'
     ]);
 
     grunt.registerTask('doc', [

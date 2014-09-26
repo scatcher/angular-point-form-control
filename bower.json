@@ -1,35 +1,39 @@
 {
-    "name": "angular-point-form-control",
-    "version": "0.0.11",
-    "homepage": "https://github.com/scatcher/angular-point-form-control",
-    "authors": [
-        "Scott Hatcher <scott@hatcher.solutions>"
-    ],
-    "description": "A directive built to simplify angular-point form controls.",
-    "main": "dist/apInputControl.min.js",
-    "dependencies": {
-        "angular": "~1.2",
-        "angular-point": "^1.0.0",
-        "angular-toastr": "^0.4.0",
-        "angular-ui-select2": "~0.0.5",
-        "jquery": "~1.11",
-        "lodash": "^2.4",
-        "bootstrap": "^3.2.0"
-    },
-    "devDependencies": {
-        "angular-sanitize": "~1.2",
-        "angular-mocks": "~1.2",
-        "angular-bootstrap": "^0.11"
-    },
-    "keywords": [
-        "angular-point"
-    ],
-    "license": "MIT",
-    "ignore": [
-        "**/.*",
-        "node_modules",
-        "bower_components",
-        "test",
-        "tests"
-    ]
+  "name": "angular-point-form-control",
+  "version": "0.0.13",
+  "homepage": "https://github.com/scatcher/angular-point-form-control",
+  "authors": [
+    "Scott Hatcher <scott@hatcher.solutions>"
+  ],
+  "description": "A directive built to simplify angular-point form controls.",
+  "main": "dist/apInputControl.min.js",
+  "dependencies": {
+    "angular": "~1.2",
+    "angular-point": "^1.0.0",
+    "angular-ui-select2": "~0.0.5",
+    "lodash": "^2.4"
+  },
+  "devDependencies": {
+    "angular-sanitize": "~1.2",
+    "angular-mocks": "~1.2",
+    "angular-bootstrap": "^0.11",
+    "angular-ui-utils": "^0.1.1",
+    "bootstrap": "^3.2.0",
+    "jquery": "~1.11",
+    "jquery-ui": "1.11.0",
+    "angular-point-form-control": "latest",
+    "angular-ui-date": "~0.0.4",
+    "angular-point-ie-safe": "https://github.com/scatcher/angular-point-ie-safe.git#master"
+  },
+  "keywords": [
+    "angular-point"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
 }

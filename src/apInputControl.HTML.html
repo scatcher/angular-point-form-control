@@ -1,3 +1,5 @@
-<div ng-if="fieldDefinition.objectType === 'HTML'"
-     text-angular
-     ng-model="entity[fieldName]"></div>
+<div text-angular
+     ng-required="options.required"
+     ng-disabled="options.disabled"
+     placeholder="{{options.placeholder}}"
+     ng-model="entity[options.fieldName]"></div>

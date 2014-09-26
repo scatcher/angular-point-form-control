@@ -1,6 +1,6 @@
-<select ng-model="state.placeholderValue"
+<select ng-model="options.boundSelectValue"
         ng-disabled="ngDisabled"
-        ng-change="updateSingleSelectLookup(state.placeholderValue)"
-        ng-options="lookup.id as lookup[state.lookupField] for (lookupId, lookup) in lookupOptions"
+        ng-change="updateSingleSelectLookup(options.boundSelectValue)"
+        ng-options="lookup.id as lookup[options.lookupField] for (lookupId, lookup) in lookupOptions"
         class="form-control">
 </select>

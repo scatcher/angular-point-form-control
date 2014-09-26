@@ -1,4 +1,6 @@
 <button class="btn btn-link"
-        ng-click="entity[fieldName] = !entity[fieldName]">
-    <i class="fa fa-2x {{ entity[fieldName] ? 'fa-check-square-o' : 'fa-square-o' }}"></i>
+        ng-click="entity[options.fieldName] = !entity[options.fieldName]"
+        ng-disabled="options.disabled"
+        ui-validate="'validate($value)'">
+    <i class="fa fa-2x {{ entity[options.fieldName] ? 'fa-check-square-o' : 'fa-square-o' }}"></i>
 </button>

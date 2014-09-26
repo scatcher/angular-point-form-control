@@ -1,0 +1,99 @@
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<!doctype html>
+<html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Demo Form</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.0/themes/smoothness/jquery-ui.min.css">
+
+    <!-- build:css styles/vendor.css -->
+    <link rel="stylesheet" href="bower_components/select2/select2.css">
+    <link rel="stylesheet" href="bower_components/select2/select2-bootstrap.css">
+    <link rel="stylesheet" href="bower_components/angular-toastr/dist/angular-toastr.css">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+
+    <!--[if lt IE 9]>
+    <script src="bower_components/angular-point-ie-safe/dist/angular-point-ie-safe.min.js"></script>
+    <![endif]-->
+
+</head>
+<body ng-app="demo" id="ng-app">
+
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Angular Point Input Demo</a>
+        </div>
+    </div>
+</nav>
+
+<div class="application-content" ng-controller="demoController">
+    <div class="container-fluid">
+        <form novalidate>
+            <div class="row">
+                <div ap-input-group
+                     data-entity="listItem"
+                     data-field-name="'text'"
+                     data-field-definition="config.text"></div>
+                <div ap-input-group
+                     data-entity="listItem"
+                     data-field-name="'number'"
+                     data-field-definition="config.number"></div>
+                <div ap-input-group
+                     data-entity="listItem"
+                     data-field-name="'note'"
+                     data-field-definition="config.note"></div>
+            </div>
+            <div class="row">
+                <div ap-input-group
+                     data-entity="listItem"
+                     data-field-name="'date'"
+                     data-field-definition="config.validDate"></div>
+                <div ap-input-group
+                     data-entity="listItem"
+                     data-field-name="'emptyDate'"
+                     data-field-definition="config.emptyDate"></div>
+                <div ap-input-group
+                     data-entity="listItem"
+                     data-field-name="'invalidDate'"
+                     data-field-definition="config.invalidDate"></div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/jquery-ui/jquery-ui.js"></script>
+<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+
+
+<!--JS Plugins/Utils -->
+<script src="bower_components/lodash/dist/lodash.js"></script>
+<script src="bower_components/select2/select2.js"></script>
+
+<!--Angular UI-->
+<script src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
+<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="bower_components/angular-ui-utils/ui-utils.js"></script>
+<script src="bower_components/angular-ui-select2/src/select2.js"></script>
+<script src="bower_components/angular-ui-date/src/date.js"></script>
+
+<script src="bower_components/angular-point/dist/angular-point.js"></script>
+<script src="bower_components/angular-point-form-control/dist/apInputControl.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>

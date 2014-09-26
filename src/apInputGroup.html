@@ -1,8 +1,8 @@
-<div class="{{state.groupClass}}">
-    <div class="form-group" title="{{state.description}}" ng-class="{'has-error': $form[fieldName].$invalid}">
-        <label>{{ state.label }}</label>
+<div class="{{options.inputGroupClass}}" ng-form="apInput">
+    <div class="form-group" title="{{options.description}}" ng-class="{'has-error': apInput.$invalid}">
+        <label class="control-label">{{ options.label }} {{options.required ? '*' : ''}}</label>
 
-        <div ng-include="contentUrl"
+        <div ng-include="options.contentUrl"
              ng-disabled="ngDisabled"></div>
         <!--<p class="help-text">{{ description}}</p>-->
     </div>

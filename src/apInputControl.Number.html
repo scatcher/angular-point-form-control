@@ -1,0 +1,10 @@
+<input type="number"
+       ng-pattern="/^\d{0,9}(\.\d{1,9})?$/"
+       class="form-control"
+       ng-model="entity[options.fieldName]"
+       ng-required="options.required"
+       ng-disabled="options.disabled"
+       min="{{options.min}}"
+       max="{{options.max}}"
+       placeholder="{{options.placeholder}}">
+<span class="text-danger" ng-show="apInput.$error.number">Not valid number!</span>
