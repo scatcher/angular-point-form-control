@@ -1,6 +1,6 @@
 {
   "name": "angular-point-form-control",
-  "version": "0.0.13",
+  "version": "0.0.15",
   "homepage": "https://github.com/scatcher/angular-point-form-control",
   "authors": [
     "Scott Hatcher <scott@hatcher.solutions>"
@@ -23,7 +23,10 @@
     "jquery-ui": "1.11.0",
     "angular-point-form-control": "latest",
     "angular-ui-date": "~0.0.4",
-    "angular-point-ie-safe": "https://github.com/scatcher/angular-point-ie-safe.git#master"
+    "angular-point-ie-safe": "https://github.com/scatcher/angular-point-ie-safe.git#master",
+    "textAngular": "^1.2",
+    "font-awesome": "~4.2.0",
+    "rangy": "~1.2.3"
   },
   "keywords": [
     "angular-point"

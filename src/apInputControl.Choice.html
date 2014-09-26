@@ -1,6 +1,6 @@
 <select class="form-control"
         ng-required="options.required"
         ng-disabled="options.disabled"
-        ng-model="entity[options.fieldName]"
+        ng-model="options.entity[options.fieldName]"
         ui-validate="'validate($value)'"
         ng-options="choice for choice in options.Choices"></select>

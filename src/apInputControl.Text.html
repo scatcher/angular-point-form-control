@@ -1,6 +1,8 @@
-<input type="{{inputType || 'text'}}"
+<input type="text"
        class="form-control"
-       ng-model="entity[options.fieldName]"
+       ng-model="options.entity[options.fieldName]"
        ng-required="options.required"
        ng-disabled="options.disabled"
+       ng-minlength="options.minlength"
+       ng-maxlength="options.maxlength"
        placeholder="{{options.placeholder}}">

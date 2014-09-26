@@ -4,20 +4,25 @@
  * @ngdoc directive
  * @name angularPoint.apInputGroup
  * @description
- * Creates individual form controls for each of the field names provided.
+ * Creates the appropriate input type for an angular-point list item field.  Binds the field to the entity, passes
+ * through validation and input control, and manages wiring up standard form group functionality.  Either a entity and
+ * a fieldName need to be provided, where we can then find the appropriate field definition from the model or a field
+ * definition object is passed in with an entity and field name property on it.  Manually specifying a value on with
+ * an HTML attribute overrides defaults as well as values stored in the fieldDefinition.
  * @param {function|number} [cols=3] Column width in a 12 column layout.
  * @param {string} [description=''] Optional description text.
  * @param {object} [fieldDefinition={'Definition from model'}] Optionally override the field definition stored in the
  * model with a custom field definition.
- * @param {string[]} [fieldDefinition.Choices] Choices to appear in dropdown.
+ * @param {string[]} [fieldDefinition.Choices] Choices to appear in dropdown.  This is automatically added to the
+ * definition for a choice type field when we extend the field definition after our first request to the server.
  * @param {string} [fieldDefinition.label] Label for the input.
  * @param {string} [fieldDefinition.objectType] One of the valid SharePoint field types.
  * @param {function} [fieldDefinition.validation] Custom validation function that receives 3 parameters
  * [currentValue, entity, fieldName].
- * @param {string} fieldName The name of the property on the entity to bind to.
+ * @param {string} [fieldName=fieldDefinition.fieldName] The name of the property on the entity to bind to.
  * @param {string|function} [groupClass="col-sm-3"] Class to use for the containing element.
- * @param {object} entity SharePoint list item.
- * @param {string} [label] Label for the input.
+ * @param {object} [entity=fieldDefinition.entity] SharePoint list item.
+ * @param {string} [label=fieldDefinition.label|fieldDefinition.DisplayName] Label for the input.
  * @param {boolean} [ngDisabled=false] Pass through to disable control using ng-disabled on element if set.
  * @param {function} [validation] Allow you to pass in validation logic.
  * @restrict A
@@ -29,17 +34,16 @@ angular.module('angularPoint')
                 /** Optionally specify the number of columns for this form group directly instead of using model */
                 cols: '=?',
                 description: '=?',
-                entity: '=',
+                entity: '=?',
                 fieldDefinition: '=?',
-                fieldName: '=',
-                groupClass: '=',
+                fieldName: '=?',
+                groupClass: '=?',
                 label: '=?',
-                ngDisabled: '=',
+                ngDisabled: '=?',
                 validation: '=?'
             },
             restrict: 'A',
             transclude: true,
-            require: '^form',
             templateUrl: 'src/apInputGroup.html',
             link: function (scope, elem, attr, ctrl) {
 
@@ -57,7 +61,7 @@ angular.module('angularPoint')
                     description: null,
                     disabled: false,
                     inputGroupClass: 'col-sm-3',
-                    label: fieldDefinition.DisplayName,
+                    label: fieldDefinition.label || fieldDefinition.DisplayName,
                     lookupField: 'title',
                     placeholder: null
                 };
@@ -76,16 +80,16 @@ angular.module('angularPoint')
                 scope.updateMultipleSelectLookup = updateMultipleSelectLookup;
 
 
+                /** If the class for the group is a function, set a watch to update the class after changing */
                 if (_.isFunction(options.groupClass)) {
-                    scope.$watch('entity.' + options.fieldName, function (newVal, oldVal) {
+                    scope.$watch('entity.' + options.fieldName, function () {
                         evaluateContainerClass();
-                        console.log('Scope change detected.');
                     });
                 }
 
                 /** Set the default field value if empty and the Default is specified */
-                if (!scope.entity[options.fieldName] && options.Default) {
-                    scope.entity[options.fieldName] = options.Default;
+                if (!options.entity[options.fieldName] && options.Default) {
+                    options.entity[options.fieldName] = options.Default;
                 }
 
                 /** Optionally choose alternative templates based on type */
@@ -121,7 +125,7 @@ angular.module('angularPoint')
                         break;
                     case 'MultiChoice':
                         options.contentUrl = 'src/apInputControl.MultiChoice.html';
-                        scope.entity[options.fieldName] = scope.entity[options.fieldName] || [];
+                        options.entity[options.fieldName] = options.entity[options.fieldName] || [];
                         break;
                     case 'Note':
                         options.rows = options.rows || 6;
@@ -203,6 +207,10 @@ angular.module('angularPoint')
                  * @returns {Object} Field definition defined in the model for that list.
                  */
                 function getFieldDefinition(entity, fieldName) {
+                    if(!entity || !fieldName) {
+                        throw new Error('An entity and fieldName are both required on the directive if' +
+                        'a fieldDefinition isn\'t specified.')
+                    }
                     return entity.getFieldDefinition(fieldName);
                 }
 
@@ -217,7 +225,7 @@ angular.module('angularPoint')
                  */
                 function updateSingleSelectLookup(selectionId) {
                     /** Create an object with expected lookupId/lookupValue properties */
-                    scope.entity[options.fieldName] = buildLookupObject(selectionId);
+                    options.entity[options.fieldName] = buildLookupObject(selectionId);
                 }
 
 
@@ -247,8 +255,8 @@ angular.module('angularPoint')
                  * specially formatted to work with select2.
                  */
                 function initializeSingleLookup() {
-                    var targetProperty = scope.entity[options.fieldName];
-                    exposeLookupOptions(scope.entity);
+                    var targetProperty = options.entity[options.fieldName];
+                    exposeLookupOptions(options.entity);
 
                     /** Process initially and whenever the underlying value is changed */
                     scope.$watch('entity.' + options.fieldName, function () {
@@ -268,14 +276,14 @@ angular.module('angularPoint')
                  */
                 function updateMultipleSelectLookup(selectionIds) {
                     /** Ensure field being bound against is array */
-                    if (!_.isArray(scope.entity[options.fieldName])) {
-                        scope.entity[options.fieldName] = [];
+                    if (!_.isArray(options.entity[options.fieldName])) {
+                        options.entity[options.fieldName] = [];
                     }
                     /** Clear out existing contents */
-                    scope.entity[options.fieldName].length = 0;
+                    options.entity[options.fieldName].length = 0;
                     /** Push formatted lookup object back */
                     _.each(selectionIds, function (stringId) {
-                        scope.entity[options.fieldName].push(buildLookupObject(stringId));
+                        options.entity[options.fieldName].push(buildLookupObject(stringId));
                     });
                 }
 
@@ -288,8 +296,8 @@ angular.module('angularPoint')
                  * specially formatted values to work with select2.
                  */
                 function initializeMultiLookup() {
-                    var targetProperty = scope.entity[options.fieldName];
-                    exposeLookupOptions(scope.entity);
+                    var targetProperty = options.entity[options.fieldName];
+                    exposeLookupOptions(options.entity);
                     options.boundSelectValue = [];
 
                     scope.$watch('entity.' + options.fieldName, function () {
@@ -313,7 +321,7 @@ angular.module('angularPoint')
                 function validate($value) {
                     if (options.validation && _.isFunction(options.validation)) {
                         var val = $value || '';
-                        return options.validation(val, scope.entity, options.fieldName);
+                        return options.validation(val, options.entity, options.fieldName);
                     } else {
                         return true;
                     }
@@ -374,53 +382,53 @@ angular.module('angularPoint')
   'use strict';
 
   $templateCache.put('src/apInputControl.Boolean.html',
-    "<button class=\"btn btn-link\" ng-click=\"entity[options.fieldName] = !entity[options.fieldName]\" ng-disabled=options.disabled ui-validate=\"'validate($value)'\"><i class=\"fa fa-2x {{ entity[options.fieldName] ? 'fa-check-square-o' : 'fa-square-o' }}\"></i></button>"
+    "<button class=\"btn btn-link\" ng-click=\"options.entity[options.fieldName] = !options.entity[options.fieldName]\" ng-disabled=options.disabled ui-validate=\"'validate($value)'\"><i class=\"fa fa-2x {{ options.entity[options.fieldName] ? 'fa-check-square-o' : 'fa-square-o' }}\"></i></button>"
   );
 
 
   $templateCache.put('src/apInputControl.Choice.html',
-    "<select class=form-control ng-required=options.required ng-disabled=options.disabled ng-model=entity[options.fieldName] ui-validate=\"'validate($value)'\" ng-options=\"choice for choice in options.Choices\"></select>"
+    "<select class=form-control ng-required=options.required ng-disabled=options.disabled ng-model=options.entity[options.fieldName] ui-validate=\"'validate($value)'\" ng-options=\"choice for choice in options.Choices\"></select>"
   );
 
 
   $templateCache.put('src/apInputControl.Date.html',
-    "<input ui-date class=form-control ui-validate=\"'validate($value)'\" ng-required=options.required ng-disabled=options.disabled ng-model=entity[options.fieldName]>"
+    "<input ui-date class=form-control ui-validate=\"'validate($value)'\" ng-required=options.required ng-disabled=options.disabled ng-model=options.entity[options.fieldName]>"
   );
 
 
   $templateCache.put('src/apInputControl.HTML.html',
-    "<div text-angular ng-required=options.required ng-disabled=options.disabled placeholder={{options.placeholder}} ng-model=entity[options.fieldName]></div>"
+    "<div text-angular ng-required=options.required name=\"{{ options.fieldName }}\" ta-disabled=options.disabled placeholder={{options.placeholder}} ng-model=options.entity[options.fieldName]></div>"
   );
 
 
   $templateCache.put('src/apInputControl.Lookup.html',
-    "<select ng-model=options.boundSelectValue ng-disabled=ngDisabled ng-change=updateSingleSelectLookup(options.boundSelectValue) ng-options=\"lookup.id as lookup[options.lookupField] for (lookupId, lookup) in lookupOptions\" class=form-control></select>"
+    "<select ng-model=options.boundSelectValue ng-required=options.required ng-disabled=options.disabled ng-change=updateSingleSelectLookup(options.boundSelectValue) ng-options=\"lookup.id as lookup[options.lookupField] for (lookupId, lookup) in lookupOptions\" class=form-control></select>"
   );
 
 
   $templateCache.put('src/apInputControl.LookupMulti.html',
-    "<select ui-select2 multiple ng-model=options.boundSelectValue ng-change=updateMultiModel() ng-disabled=ngDisabled class=form-control><option ng-repeat=\"lookup in lookupOptions\" value=\"{{ lookup.id }}\" ng-bind=lookup[options.lookupField]>&nbsp;</option></select>"
+    "<select ui-select2 multiple ng-model=options.boundSelectValue ng-change=updateMultiModel() ng-required=options.required ng-disabled=options.disabled class=form-control><option ng-repeat=\"lookup in lookupOptions\" value=\"{{ lookup.id }}\" ng-bind=lookup[options.lookupField]>&nbsp;</option></select>"
   );
 
 
   $templateCache.put('src/apInputControl.MultiChoice.html',
-    "<select ui-select2 multiple ng-model=entity[options.fieldName] class=form-control><option value=\"\"></option><option ng-repeat=\"choice in options.Choices\" value={{choice}}>{{choice}}</option></select>"
+    "<select ui-select2 multiple ng-required=options.required ng-disabled=options.disabled ng-model=options.entity[options.fieldName] class=form-control><option value=\"\"></option><option ng-repeat=\"choice in options.Choices\" value={{choice}}>{{choice}}</option></select>"
   );
 
 
   $templateCache.put('src/apInputControl.Note.html',
-    "<textarea ng-model=entity[options.fieldName] ui-validate=\"'validate($value)'\" class=form-control rows={{options.rows}} ng-required=options.required ng-disabled=options.disabled placeholder={{options.placeholder}}>\n" +
+    "<textarea ng-model=options.entity[options.fieldName] ui-validate=\"'validate($value)'\" class=form-control rows={{options.rows}} ng-required=options.required ng-disabled=options.disabled placeholder={{options.placeholder}}>\n" +
     "</textarea>"
   );
 
 
   $templateCache.put('src/apInputControl.Number.html',
-    "<input type=number ng-pattern=\"/^\\d{0,9}(\\.\\d{1,9})?$/\" class=form-control ng-model=entity[options.fieldName] ng-required=options.required ng-disabled=options.disabled min={{options.min}} max={{options.max}} placeholder={{options.placeholder}}> <span class=text-danger ng-show=apInput.$error.number>Not valid number!</span>"
+    "<input type=number class=form-control ng-model=options.entity[options.fieldName] ng-required=options.required ng-disabled=options.disabled min={{options.min}} max={{options.max}} placeholder={{options.placeholder}}> <span class=text-danger ng-show=apInput.$error.number>Not valid number!</span>"
   );
 
 
   $templateCache.put('src/apInputControl.Text.html',
-    "<input type=\"{{inputType || 'text'}}\" class=form-control ng-model=entity[options.fieldName] ng-required=options.required ng-disabled=options.disabled placeholder={{options.placeholder}}>"
+    "<input class=form-control ng-model=options.entity[options.fieldName] ng-required=options.required ng-disabled=options.disabled ng-minlength=options.minlength ng-maxlength=options.maxlength placeholder={{options.placeholder}}>"
   );
 
 

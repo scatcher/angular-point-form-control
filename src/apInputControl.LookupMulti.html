@@ -2,7 +2,8 @@
         multiple
         ng-model="options.boundSelectValue"
         ng-change="updateMultiModel()"
-        ng-disabled="ngDisabled"
+        ng-required="options.required"
+        ng-disabled="options.disabled"
         class="form-control">
     <option ng-repeat="lookup in lookupOptions" value="{{ lookup.id }}"
             ng-bind="lookup[options.lookupField]">&nbsp;</option>

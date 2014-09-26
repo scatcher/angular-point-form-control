@@ -1,5 +1,6 @@
 <select ng-model="options.boundSelectValue"
-        ng-disabled="ngDisabled"
+        ng-required="options.required"
+        ng-disabled="options.disabled"
         ng-change="updateSingleSelectLookup(options.boundSelectValue)"
         ng-options="lookup.id as lookup[options.lookupField] for (lookupId, lookup) in lookupOptions"
         class="form-control">

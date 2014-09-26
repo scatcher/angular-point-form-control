@@ -1,5 +1,6 @@
 <div text-angular
      ng-required="options.required"
-     ng-disabled="options.disabled"
+     name="{{ options.fieldName }}"
+     ta-disabled="options.disabled"
      placeholder="{{options.placeholder}}"
-     ng-model="entity[options.fieldName]"></div>
+     ng-model="options.entity[options.fieldName]"></div>

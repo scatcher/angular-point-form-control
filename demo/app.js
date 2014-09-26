@@ -9,12 +9,23 @@ angular.module('demo', [
     'ui.date',
     'ui.select2',
     'ui.utils',
+    'textAngular',
 
     //SP-Angular
     'angularPoint'
 
 ])
     .controller('demoController', function ($scope) {
+        $scope.listItem = {
+            text: 'This is some text.',
+            number: 33,
+            note: 'Hello world',
+            date: new Date(),
+            emptyDate: null,
+            invalidDate: 'some text',
+            html: '<div>I\'m HTML</div>'
+        };
+
         $scope.config = {
             text: {
                 cols: 3,
@@ -47,13 +58,13 @@ angular.module('demo', [
                 objectType: 'DateTime'
             },
             html: {
-                cols: 6,
+                cols: 12,
+                entity: $scope.listItem,
+                fieldName: 'html',
                 label: 'HTML',
-                rows: 3,
-                objectType: 'Note',
-                validation: function(val, entity, propertyName) {
-                    return val.length < 3;
-                }
+                disabled: true,
+                rows: 1,
+                objectType: 'HTML'
             },
             note: {
                 cols: 6,
@@ -65,13 +76,4 @@ angular.module('demo', [
                 }
             }
         };
-        $scope.listItem = {
-            text: 'This is some text.',
-            number: 33,
-            note: 'Hello world',
-            date: new Date(),
-            emptyDate: null,
-            invalidDate: 'some text',
-            html: '<div>I\'m HTML</div>'
-        }
     });

@@ -21,7 +21,9 @@
     <!-- build:css styles/vendor.css -->
     <link rel="stylesheet" href="bower_components/select2/select2.css">
     <link rel="stylesheet" href="bower_components/select2/select2-bootstrap.css">
+    <link rel="stylesheet" href="bower_components/textAngular/dist/textAngular.min.css">
     <link rel="stylesheet" href="bower_components/angular-toastr/dist/angular-toastr.css">
+    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
 
     <!--[if lt IE 9]>
@@ -70,6 +72,10 @@
                      data-field-name="'invalidDate'"
                      data-field-definition="config.invalidDate"></div>
             </div>
+            <div class="row">
+                <div ap-input-group
+                     data-field-definition="config.html"></div>
+            </div>
         </form>
     </div>
 </div>
@@ -90,6 +96,10 @@
 <script src="bower_components/angular-ui-utils/ui-utils.js"></script>
 <script src="bower_components/angular-ui-select2/src/select2.js"></script>
 <script src="bower_components/angular-ui-date/src/date.js"></script>
+<script src="bower_components/textAngular/dist/textAngular.min.js"></script>
+<!--<script src="bower_components/textAngular/dist/textAngular-sanitize.min.js"></script>-->
+<script src="bower_components/rangy/rangy-core.js"></script>
+<script src="bower_components/rangy/rangy-selectionsaverestore.js"></script>
 
 <script src="bower_components/angular-point/dist/angular-point.js"></script>
 <script src="bower_components/angular-point-form-control/dist/apInputControl.js"></script>

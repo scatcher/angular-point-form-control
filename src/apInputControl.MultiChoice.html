@@ -1,6 +1,8 @@
 <select ui-select2
         multiple="true"
-        ng-model="entity[options.fieldName]"
+        ng-required="options.required"
+        ng-disabled="options.disabled"
+        ng-model="options.entity[options.fieldName]"
         class="form-control">
     <option value=""></option>
     <option ng-repeat="choice in options.Choices" value="{{choice}}">
