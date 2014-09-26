@@ -68,6 +68,11 @@ angular.module('angularPoint')
                     });
                 }
 
+                /** Set the default field value if empty and the Default is specified */
+                if(!scope.entity[scope.fieldName] && fieldDefinition.Default) {
+                    scope.entity[scope.fieldName] = fieldDefinition.Default;
+                }
+
                 /** Default input type is text */
                 scope.contentUrl = 'src/apInputControl.Text.html';
 
