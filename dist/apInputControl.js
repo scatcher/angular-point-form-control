@@ -13,7 +13,7 @@
  * @param {string} [fieldDefinition.label] Label for the input.
  * @param {string} [fieldDefinition.objectType] One of the valid SharePoint field types.
  * @param {string} fieldName The name of the property on the entity to bind to.
- * @param {string} [groupClass="col-md-3"] Class to use for the containing element.
+ * @param {string} [groupClass="col-sm-3"] Class to use for the containing element.
  * @param {object} entity SharePoint list item.
  * @param {string} [label] Label for the input.
  * @param {boolean} [ngDisabled=false] Pass through to disable control using ng-disabled on element if set.
@@ -50,7 +50,7 @@ angular.module('angularPoint')
                 var state = {
                     columns: 3,
                     description: scope.description || fieldDefinition.Description || null,
-                    groupClass: 'col-md-3',
+                    groupClass: 'col-sm-3',
                     label: scope.label || fieldDefinition.label || fieldDefinition.DisplayName,
                     lookupField: 'title',
                     placeholderValue: null
@@ -135,7 +135,7 @@ angular.module('angularPoint')
 
                 function buildColumnBasedClass() {
                     var cols = scope.cols || fieldDefinition.cols || 3;
-                    return 'col-md-' + cols;
+                    return 'col-sm-' + cols;
                 }
 
                 function getLookupOptions(entity) {
