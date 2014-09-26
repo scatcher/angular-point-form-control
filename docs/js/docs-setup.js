@@ -10,7 +10,7 @@ NG_DOCS={
       "type": "directive",
       "moduleName": "angular-point",
       "shortDescription": "Creates individual form controls for each of the field names provided.",
-      "keywords": "allow angular-point api appear bind choices column control controls creates custom definition description directive disable dropdown element entity field fieldname form individual input item label layout list logic model names ng-disabled objecttype optional optionally override pass property provided set sharepoint stored text types valid validation width"
+      "keywords": "allow angular-point api appear bind choices class col-md-3 column control controls creates custom definition description directive disable dropdown element entity field fieldname form individual input item label layout list logic model names ng-disabled objecttype optional optionally override pass property provided set sharepoint stored text types valid validation width"
     },
     {
       "section": "api",

@@ -50,6 +50,7 @@ angular.module('angularPoint')
                 var state = {
                     columns: 3,
                     description: scope.description || fieldDefinition.Description || null,
+                    groupClass: 'col-md-3',
                     label: scope.label || fieldDefinition.label || fieldDefinition.DisplayName,
                     lookupField: 'title',
                     placeholderValue: null
@@ -60,7 +61,7 @@ angular.module('angularPoint')
                 scope.fieldDefinition = fieldDefinition;
                 scope.validation = fieldDefinition.validation || validation;
 
-                if (_.isFunction(scope.cols)) {
+                if (_.isFunction(scope.groupClass)) {
                     scope.$watch('entity.' + scope.fieldName, function (oldVal, newVal) {
                         evaluateContainerClass();
                         console.log('Scope change detected.');
