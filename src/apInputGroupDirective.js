@@ -52,19 +52,74 @@ angular.module('angularPoint')
                 if (!_.isObject(fieldDefinition)) {
                     throw new Error('apInputGroup requires a valid field definition object', scope);
                 }
+                /** Called after setup for post processing */
+                var postSetupQueue = [evaluateContainerClass];
 
                 var defaultNumberOfColumns = 3;
 
                 var defaults = {
-                    boundSelectValue: null, //Location we use to store value from select so we can build lookup value
                     columns: defaultNumberOfColumns,
+                    contentUrl: '',
                     description: null,
                     disabled: false,
                     inputGroupClass: 'col-sm-3',
                     label: fieldDefinition.label || fieldDefinition.DisplayName,
                     lookupField: 'title',
-                    placeholder: null
+                    maxlength: undefined,
+                    minlength: undefined,
+                    placeholder: null,
+                    required: false,
+                    rows: 6,
+                    validationMessage: ''
                 };
+
+                /** Optionally choose alternative templates based on type */
+                switch (fieldDefinition.objectType) {
+                    case 'Boolean':
+                        defaults.contentUrl = 'src/apInputControl.Boolean.html';
+                        break;
+                    case 'Choice':
+                        defaults.contentUrl = 'src/apInputControl.Choice.html';
+                        break;
+                    case 'DateTime':
+                        defaults.contentUrl = 'src/apInputControl.Date.html';
+                        defaults.validation = defaults.validation || dateValidation;
+                        defaults.validationMessage = 'Please enter a valid date.';
+                        break;
+                    case 'HTML':
+                        defaults.contentUrl = 'src/apInputControl.HTML.html';
+                        defaultNumberOfColumns = 12;
+                        break;
+                    //TODO differentiate integer from number
+                    case 'Integer':
+                    case 'Number':
+                        defaults.contentUrl = 'src/apInputControl.Number.html';
+                        defaults.validationMessage = 'Not a valid number!';
+                        break;
+                    case 'Lookup':
+                        postSetupQueue.push(function() {
+                            exposeLookupOptions(options.entity);
+                        });
+                        defaults.contentUrl = 'src/apInputControl.Lookup.html';
+                        break;
+                    case 'LookupMulti':
+                        postSetupQueue.push(function() {
+                            options.entity[options.fieldName] = options.entity[options.fieldName] || [];
+                            exposeLookupOptions(options.entity);
+                        });
+                        defaults.contentUrl = 'src/apInputControl.LookupMulti.html';
+                        break;
+                    case 'MultiChoice':
+                        defaults.contentUrl = 'src/apInputControl.MultiChoice.html';
+                        break;
+                    case 'Note':
+                        defaultNumberOfColumns = 12;
+                        defaults.contentUrl = 'src/apInputControl.Note.html';
+                        break;
+                    default:
+                        defaults.contentUrl = 'src/apInputControl.Text.html';
+                }
+
 
                 var options = _.extend({}, defaults, fieldDefinition, scope);
 
@@ -76,9 +131,6 @@ angular.module('angularPoint')
                 /** Expose to templates */
                 scope.options = options;
                 scope.validate = validate;
-                scope.updateSingleSelectLookup = updateSingleSelectLookup;
-                scope.updateMultipleSelectLookup = updateMultipleSelectLookup;
-
 
                 /** If the class for the group is a function, set a watch to update the class after changing */
                 if (_.isFunction(options.groupClass)) {
@@ -92,51 +144,10 @@ angular.module('angularPoint')
                     options.entity[options.fieldName] = options.Default;
                 }
 
-                /** Optionally choose alternative templates based on type */
-                switch (options.objectType) {
-                    case 'Boolean':
-                        options.contentUrl = 'src/apInputControl.Boolean.html';
-                        break;
-                    case 'Choice':
-                        options.contentUrl = 'src/apInputControl.Choice.html';
-                        break;
-                    case 'DateTime':
-                        options.contentUrl = 'src/apInputControl.Date.html';
-                        options.validation = options.validation || dateValidation;
-                        break;
-                    case 'HTML':
-                        options.contentUrl = 'src/apInputControl.HTML.html';
-                        defaultNumberOfColumns = 12;
-                        break;
-                    //TODO differentiate integer from number
-                    case 'Integer':
-                        options.contentUrl = 'src/apInputControl.Number.html';
-                        break;
-                    case 'Number':
-                        options.contentUrl = 'src/apInputControl.Number.html';
-                        break;
-                    case 'Lookup':
-                        initializeSingleLookup();
-                        options.contentUrl = 'src/apInputControl.Lookup.html';
-                        break;
-                    case 'LookupMulti':
-                        initializeMultiLookup();
-                        options.contentUrl = 'src/apInputControl.LookupMulti.html';
-                        break;
-                    case 'MultiChoice':
-                        options.contentUrl = 'src/apInputControl.MultiChoice.html';
-                        options.entity[options.fieldName] = options.entity[options.fieldName] || [];
-                        break;
-                    case 'Note':
-                        options.rows = options.rows || 6;
-                        defaultNumberOfColumns = 12;
-                        options.contentUrl = 'src/apInputControl.Note.html';
-                        break;
-                    default:
-                        options.contentUrl = 'src/apInputControl.Text.html';
-                }
+                _.each(postSetupQueue, function(process) {
+                    process();
+                });
 
-                return evaluateContainerClass();
 
                 /**======================PRIVATE============================*/
 
@@ -181,20 +192,19 @@ angular.module('angularPoint')
                  * @param {object} entity List item.
                  */
                 function exposeLookupOptions(entity) {
-                    var lookupOptions = {};
-
-                    if(options.lookupOptions) {
-                        lookupOptions = options.lookupOptions;
-                    } else {
+                    if(!options.lookupOptions) {
                         var lookupListGuid = options.List;
                         if (lookupListGuid) {
-                            lookupOptions = apCacheService.getCachedEntities(lookupListGuid);
+                            options.lookupOptions = apCacheService.getCachedEntities(lookupListGuid);
                             if (_.isFunction(options.lookupFilter)) {
-                                lookupOptions = options.lookupFilter(entity, lookupOptions);
+                                options.lookupOptions = options.lookupFilter(entity, lookupOptions);
                             }
                         }
                     }
-                    scope.lookupOptions = lookupOptions;
+
+                    /** Need to be formatted as an array */
+                    options.lookupArray = _.isArray(options.lookupOptions) ?
+                        options.lookupOptions : _.toArray(options.lookupOptions);
                 }
 
                 /**
@@ -212,101 +222,6 @@ angular.module('angularPoint')
                         'a fieldDefinition isn\'t specified.')
                     }
                     return entity.getFieldDefinition(fieldName);
-                }
-
-                /**
-                 * @ngdoc function
-                 * @name angularPoint.apInputGroup:updateSingleSelectLookup
-                 * @methodOf angularPoint.apInputGroup
-                 * @description
-                 * Fired on ng-change after a lookup is changed and pushed that change back to
-                 * the original model.
-                 * @param {string} selectionId LookupId formatted as a string.
-                 */
-                function updateSingleSelectLookup(selectionId) {
-                    /** Create an object with expected lookupId/lookupValue properties */
-                    options.entity[options.fieldName] = buildLookupObject(selectionId);
-                }
-
-
-                /**
-                 * @ngdoc function
-                 * @name angularPoint.apInputGroup:buildLookupObject
-                 * @methodOf angularPoint.apInputGroup
-                 * @description
-                 * Converts the string id used in select2 into the a properly formatted lookup
-                 * field containing a {lookupId: (Number|*), lookupValue: *}
-                 * @param {string} stringId LookupId formatted as a string.
-                 * @returns {object} Lookup object. {lookupId: (Number|*), lookupValue: *}
-                 */
-                function buildLookupObject(stringId) {
-                    var intID = parseInt(stringId, 10);
-                    var match = scope.lookupOptions[intID];
-                    return {lookupId: intID, lookupValue: match[options.lookupField]};
-                }
-
-
-                /**
-                 * @ngdoc function
-                 * @name angularPoint.apInputGroup:initializeSingleLookup
-                 * @methodOf angularPoint.apInputGroup
-                 * @description
-                 * Abstracts a lookup type field by temporary creating another model
-                 * specially formatted to work with select2.
-                 */
-                function initializeSingleLookup() {
-                    var targetProperty = options.entity[options.fieldName];
-                    exposeLookupOptions(options.entity);
-
-                    /** Process initially and whenever the underlying value is changed */
-                    scope.$watch('entity.' + options.fieldName, function () {
-                        if (_.isObject(targetProperty) && targetProperty.lookupId) {
-                            /** Set the selected id as string */
-                            options.boundSelectValue = targetProperty.lookupId;
-                        }
-                    });
-                }
-
-                /**
-                 * @ngdoc function
-                 * @name angularPoint.apInputGroup:updateMultipleSelectLookup
-                 * @methodOf angularPoint.apInputGroup
-                 * @description
-                 * Updates the true model when the select2 values change.
-                 */
-                function updateMultipleSelectLookup(selectionIds) {
-                    /** Ensure field being bound against is array */
-                    if (!_.isArray(options.entity[options.fieldName])) {
-                        options.entity[options.fieldName] = [];
-                    }
-                    /** Clear out existing contents */
-                    options.entity[options.fieldName].length = 0;
-                    /** Push formatted lookup object back */
-                    _.each(selectionIds, function (stringId) {
-                        options.entity[options.fieldName].push(buildLookupObject(stringId));
-                    });
-                }
-
-                /**
-                 * @ngdoc function
-                 * @name angularPoint.apInputGroup:initializeMultiLookup
-                 * @methodOf angularPoint.apInputGroup
-                 * @description
-                 * Abstracts the multi-lookup inputs model and creates an intermediary model that contains
-                 * specially formatted values to work with select2.
-                 */
-                function initializeMultiLookup() {
-                    var targetProperty = options.entity[options.fieldName];
-                    exposeLookupOptions(options.entity);
-                    options.boundSelectValue = [];
-
-                    scope.$watch('entity.' + options.fieldName, function () {
-                        /**  Set the string version of id's to allow multi-select control to work properly */
-                        _.each(targetProperty, function (selectedLookup) {
-                            /** Push id as a string to match what Select2 is expecting */
-                            options.boundSelectValue.push(selectedLookup.lookupId.toString());
-                        });
-                    });
                 }
 
                 /**

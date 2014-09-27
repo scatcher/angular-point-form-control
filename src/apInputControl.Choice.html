@@ -1,5 +1,7 @@
 <select class="form-control"
         ng-required="options.required"
+        ui-validate="'validate($value)'"
+        placeholder="{{ options.placeholder }}"
         ng-disabled="options.disabled"
         ng-model="options.entity[options.fieldName]"
         ui-validate="'validate($value)'"

@@ -1,10 +1,9 @@
-<select ui-select2
-        multiple
-        ng-model="options.boundSelectValue"
-        ng-change="updateMultiModel()"
+<div ui-select multiple
+        ng-model="options.entity[options.fieldName]"
+        ui-validate="'validate($value)'"
         ng-required="options.required"
-        ng-disabled="options.disabled"
-        class="form-control">
-    <option ng-repeat="lookup in lookupOptions" value="{{ lookup.id }}"
-            ng-bind="lookup[options.lookupField]">&nbsp;</option>
-</select>
+        ng-disabled="options.disabled">
+    <div ui-select-match placeholder="{{ options.placeholder }}">{{ $item[options.lookupField] }}</div>
+    <div ui-select-choices data-repeat="{'lookupId': lookup.id, 'lookupValue': lookup[options.lookupField]} as
+    lookup in options.lookupArray track by lookup.id ">{{ lookup[options.lookupField] }}</div>
+</div>

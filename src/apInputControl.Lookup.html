@@ -1,7 +1,9 @@
-<select ng-model="options.boundSelectValue"
-        ng-required="options.required"
-        ng-disabled="options.disabled"
-        ng-change="updateSingleSelectLookup(options.boundSelectValue)"
-        ng-options="lookup.id as lookup[options.lookupField] for (lookupId, lookup) in lookupOptions"
-        class="form-control">
-</select>
+<div ui-select
+     ng-model="options.entity[options.fieldName]"
+     ng-required="options.required"
+     ng-disabled="options.disabled">
+    <div ui-select-match placeholder="{{ options.placeholder }}">{{ $select.selected[options.lookupField] }}</div>
+    <div ui-select-choices data-repeat="{'lookupId': lookup.id, 'lookupValue': lookup[options.lookupField]} as
+lookup in options.lookupArray track by lookup.id ">{{ lookup[options.lookupField] }}
+    </div>
+</div>

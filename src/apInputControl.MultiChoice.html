@@ -1,11 +1,9 @@
-<select ui-select2
-        multiple="true"
+<div ui-select multiple
         ng-required="options.required"
+        ui-validate="'validate($value)'"
         ng-disabled="options.disabled"
         ng-model="options.entity[options.fieldName]"
         class="form-control">
-    <option value=""></option>
-    <option ng-repeat="choice in options.Choices" value="{{choice}}">
-        {{choice}}
-    </option>
-</select>
+    <div ui-select-match placeholder="{{ options.placeholder }}">{{ $item }}</div>
+    <div ui-select-choices data-repeat="choice in options.Choices">{{ choice }}</div>
+</div>

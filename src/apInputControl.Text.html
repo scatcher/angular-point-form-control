@@ -1,8 +1,9 @@
 <input type="text"
        class="form-control"
+       ui-validate="'validate($value)'"
        ng-model="options.entity[options.fieldName]"
        ng-required="options.required"
        ng-disabled="options.disabled"
-       ng-minlength="options.minlength"
-       ng-maxlength="options.maxlength"
+       ng-minlength="{{ options.minlength }}"
+       ng-maxlength="{{ options.maxlength }}"
        placeholder="{{options.placeholder}}">

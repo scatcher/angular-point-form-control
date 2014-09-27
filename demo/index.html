@@ -19,8 +19,7 @@
     <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.0/themes/smoothness/jquery-ui.min.css">
 
     <!-- build:css styles/vendor.css -->
-    <link rel="stylesheet" href="bower_components/select2/select2.css">
-    <link rel="stylesheet" href="bower_components/select2/select2-bootstrap.css">
+    <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.min.css">
     <link rel="stylesheet" href="bower_components/textAngular/dist/textAngular.min.css">
     <link rel="stylesheet" href="bower_components/angular-toastr/dist/angular-toastr.css">
     <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
@@ -44,37 +43,12 @@
 <div class="application-content" ng-controller="demoController">
     <div class="container-fluid">
         <form novalidate>
-            <div class="row">
-                <div ap-input-group
+            <div class="row" ng-repeat="row in fieldDefinitions">
+                <div ng-repeat="field in row"
                      data-entity="listItem"
-                     data-field-name="'text'"
-                     data-field-definition="config.text"></div>
-                <div ap-input-group
-                     data-entity="listItem"
-                     data-field-name="'number'"
-                     data-field-definition="config.number"></div>
-                <div ap-input-group
-                     data-entity="listItem"
-                     data-field-name="'note'"
-                     data-field-definition="config.note"></div>
-            </div>
-            <div class="row">
-                <div ap-input-group
-                     data-entity="listItem"
-                     data-field-name="'date'"
-                     data-field-definition="config.validDate"></div>
-                <div ap-input-group
-                     data-entity="listItem"
-                     data-field-name="'emptyDate'"
-                     data-field-definition="config.emptyDate"></div>
-                <div ap-input-group
-                     data-entity="listItem"
-                     data-field-name="'invalidDate'"
-                     data-field-definition="config.invalidDate"></div>
-            </div>
-            <div class="row">
-                <div ap-input-group
-                     data-field-definition="config.html"></div>
+                     data-field-name="field.fieldName"
+                     ap-input-group
+                     data-field-definition="field"></div>
             </div>
         </form>
     </div>
@@ -88,18 +62,12 @@
 
 <!--JS Plugins/Utils -->
 <script src="bower_components/lodash/dist/lodash.js"></script>
-<script src="bower_components/select2/select2.js"></script>
+<script src="bower_components/angular-ui-select/dist/select.js"></script>
 
 <!--Angular UI-->
-<script src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
-<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 <script src="bower_components/angular-ui-utils/ui-utils.js"></script>
-<script src="bower_components/angular-ui-select2/src/select2.js"></script>
 <script src="bower_components/angular-ui-date/src/date.js"></script>
 <script src="bower_components/textAngular/dist/textAngular.min.js"></script>
-<!--<script src="bower_components/textAngular/dist/textAngular-sanitize.min.js"></script>-->
-<script src="bower_components/rangy/rangy-core.js"></script>
-<script src="bower_components/rangy/rangy-selectionsaverestore.js"></script>
 
 <script src="bower_components/angular-point/dist/angular-point.js"></script>
 <script src="bower_components/angular-point-form-control/dist/apInputControl.js"></script>

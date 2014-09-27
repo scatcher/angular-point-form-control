@@ -1,9 +1,9 @@
 <input type="number"
        class="form-control"
+       ui-validate="'validate($value)'"
        ng-model="options.entity[options.fieldName]"
        ng-required="options.required"
        ng-disabled="options.disabled"
        min="{{options.min}}"
        max="{{options.max}}"
        placeholder="{{options.placeholder}}">
-<span class="text-danger" ng-show="apInput.$error.number">Not valid number!</span>
