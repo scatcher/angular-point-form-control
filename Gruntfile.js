@@ -105,7 +105,8 @@ module.exports = function (grunt) {
                 ]
             },
             docs: 'docs',
-            server: '.tmp'
+            server: '.tmp',
+            grunt: '.grunt'
         },
 
         ngtemplates: {
@@ -187,7 +188,8 @@ module.exports = function (grunt) {
                     domainName: 'scatcher.github.io'
                 },
                 startPage: '/api/angularPoint.apInputGroup',
-                title: 'Angular-Point-Control Directive Docs'
+                titleLink: '//github.com/scatcher/angular-point-form-control',
+                title: 'Angular-Point-Form-Control'
             },
             api: {
                 src: [
@@ -256,7 +258,7 @@ module.exports = function (grunt) {
     ]);
 
     grunt.registerTask('doc', [
-//        'clean:docs',
+        'clean:docs',
         'ngdocs'
     ]);
 
