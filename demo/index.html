@@ -42,7 +42,28 @@
 
 <div class="application-content" ng-controller="demoController">
     <div class="container-fluid">
+
         <form novalidate>
+            <div class="well well-sm">
+                <label>Toggle Mode</label>
+
+                <div class="btn-group">
+                    <a href class="btn btn-primary"
+                       ng-class="{active: state.required}"
+                       ng-click="toggleBooleanProperty('required')">Required
+                    </a>
+                    <a href class="btn btn-primary"
+                       ng-class="{active: state.disabled}"
+                       ng-click="toggleBooleanProperty('disabled')">Disabled
+                    </a>
+                    <a href class="btn btn-primary"
+                       ng-class="{active: state.displayDescription}"
+                       ng-click="toggleBooleanProperty('displayDescription')">Display Description
+                    </a>
+                </div>
+            </div>
+
+
             <div class="row" ng-repeat="row in fieldDefinitions">
                 <div ng-repeat="field in row"
                      data-entity="listItem"

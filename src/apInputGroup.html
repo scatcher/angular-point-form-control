@@ -4,6 +4,7 @@
 
         <div ng-include="options.contentUrl"
              ng-disabled="ngDisabled"></div>
+        <span class="help-text" ng-if="options.displayDescription">{{ options.description }}</span>
         <span class="text-danger" ng-if="apInput.$invalid">{{ options.validationMessage }}</span>
     </div>
 </div>

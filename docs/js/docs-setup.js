@@ -19,7 +19,7 @@ NG_DOCS={
       "type": "directive",
       "moduleName": "angularPoint",
       "shortDescription": "Creates the appropriate input type for an angular-point list item field.  Binds the field to the entity, passes",
-      "keywords": "$value abstracts allow allows angular-point angularpoint api apinputgroup appear appropriate attempt attribute automatically bind binds bootstrap built cache cached change changed checks choice choices class col-sm-12 col-sm-3 column control converts create creates creating current custom defaults defined definition description determine directive disable displayname don dropdown dynamically element empty entity extend fetch field fielddefinition fieldname find fired form formatted function functionality group guid html input inputs intermediary isn item label layout list logic lookup lookupid lookupoptions lookupvalue manages manually model multi-lookup ng-change ng-disabled normal object objecttype optional optionally options original override overrides parameters pass passed passes properly property provided pushed receives referencing request returns select2 selectionid server set sharepoint simply size specially standard stored string stringid temporary text true type types ui-date updates val valid validation validity values width wiring work"
+      "keywords": "$value allows angular-point angularpoint api apinputgroup appear appropriate attempt attribute attributes automatically bind binds bootstrap built cache cached checks choice choices class col-sm-12 col-sm-3 column consistency control convert create creates current currentvalue custom defaults defined definition description determine directive disable display displayname don dropdown dynamically element empty entity extend fetch field fielddefinition fieldname find form function functionality group guid html individual input inputs invalid isn item label layout list logic lookup lookupoptions lowercase manages manually mark max maxlength message min minlength model named ng-disabled node normal object optional optionally options override overrides parameters params pass passed passes placehoder property provided receives referencing request required returns rows server set sharepoint simply size standard stored text title true type types typically ui-date val valid validation validity values width wiring"
     }
   ],
   "apis": {
@@ -27,7 +27,7 @@ NG_DOCS={
   },
   "html5Mode": false,
   "editExample": true,
-  "startPage": "/api",
+  "startPage": "/api/angularPoint.apInputGroup",
   "scripts": [
     "angular.js",
     "angular-animate.min.js"

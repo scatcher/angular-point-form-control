@@ -186,7 +186,7 @@ module.exports = function (grunt) {
                     account: 'UA-51195298-1',
                     domainName: 'scatcher.github.io'
                 },
-//                startPage: '/api',
+                startPage: '/api/angularPoint.apInputGroup',
                 title: 'Angular-Point-Control Directive Docs'
             },
             api: {

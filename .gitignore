@@ -3,3 +3,4 @@ demo/bower_components/
 *.log
 .idea
 .tmp
+.grunt

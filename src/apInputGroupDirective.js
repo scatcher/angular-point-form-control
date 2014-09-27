@@ -9,43 +9,65 @@
  * a fieldName need to be provided, where we can then find the appropriate field definition from the model or a field
  * definition object is passed in with an entity and field name property on it.  Manually specifying a value on with
  * an HTML attribute overrides defaults as well as values stored in the fieldDefinition.
+ * @param {string[]} [choices] Choices to appear in dropdown.  This is automatically added to the
+ * definition for a choice type field when we extend the field definition after our first request to the server but
+ * it comes from a node named Choices so we convert to lowercase for consistency within directive.
  * @param {function|number} [cols=3] Column width in a 12 column layout.
  * @param {string} [description=''] Optional description text.
+ * @param {boolean} [disabled=false] Pass through to disable control using ng-disabled on element if set.
+ * @param {boolean} [displayDescription=false] Show the field description below the input.
+ * @param {object} entity SharePoint list item.
  * @param {object} [fieldDefinition={'Definition from model'}] Optionally override the field definition stored in the
- * model with a custom field definition.
- * @param {string[]} [fieldDefinition.Choices] Choices to appear in dropdown.  This is automatically added to the
- * definition for a choice type field when we extend the field definition after our first request to the server.
- * @param {string} [fieldDefinition.label] Label for the input.
- * @param {string} [fieldDefinition.objectType] One of the valid SharePoint field types.
- * @param {function} [fieldDefinition.validation] Custom validation function that receives 3 parameters
- * [currentValue, entity, fieldName].
+ * model with a custom field definition.  Params can be passed in through this object or as individual attributes
+ * on the html element.
  * @param {string} [fieldName=fieldDefinition.fieldName] The name of the property on the entity to bind to.
  * @param {string|function} [groupClass="col-sm-3"] Class to use for the containing element.
- * @param {object} [entity=fieldDefinition.entity] SharePoint list item.
  * @param {string} [label=fieldDefinition.label|fieldDefinition.DisplayName] Label for the input.
- * @param {boolean} [ngDisabled=false] Pass through to disable control using ng-disabled on element if set.
- * @param {function} [validation] Allow you to pass in validation logic.
+ * @param {string} [lookupField='title'] The display property to use for a lookup type field.  Typically we do a lookup
+ * and use the title but optionally can override with another field name.
+ * @param {number} max Pass through for inputs that can use this attribute.
+ * @param {number} maxlength Pass through for inputs that can use this attribute.
+ * @param {number} min Pass through for inputs that can use this attribute.
+ * @param {number} minlength Pass through for inputs that can use this attribute.
+ * @param {string} placehoder Pass through for inputs that can use this attribute.
+ * @param {boolean} required Mark input as invalid if empty.
+ * @param {number} rows Pass through for inputs that can use this attribute.
+ * @param {string} [objectType=Text] One of the valid SharePoint field types.
+ * @param {function} [validation] Custom validation function that receives 2 parameters
+ * [{string} currentValue, {object} options].
+ * @param {string} [validationMessage=''] Message to display below input when invalid.
  * @restrict A
  * */
 angular.module('angularPoint')
-    .directive('apInputGroup', function (_, apCacheService) {
+    .directive('apInputGroup', function (_, apCacheService, $filter) {
         return {
             scope: {
                 /** Optionally specify the number of columns for this form group directly instead of using model */
+                choices: '=?',
                 cols: '=?',
                 description: '=?',
+                disabled: '=?',
+                displayDescription: '=?',
                 entity: '=?',
                 fieldDefinition: '=?',
                 fieldName: '=?',
                 groupClass: '=?',
                 label: '=?',
-                ngDisabled: '=?',
-                validation: '=?'
+                lookupField: '=?',
+                max: '=?',
+                maxlength: '=?',
+                min: '=?',
+                minlength: '=?',
+                placeholder: '=?',
+                required: '=?',
+                rows: '=?',
+                validation: '=?',
+                validationMessage: '=?'
             },
             restrict: 'A',
             transclude: true,
             templateUrl: 'src/apInputGroup.html',
-            link: function (scope, elem, attr, ctrl) {
+            link: function (scope, elem, attr) {
 
                 var fieldDefinition = scope.fieldDefinition || getFieldDefinition(scope.entity, scope.fieldName);
 
@@ -58,18 +80,25 @@ angular.module('angularPoint')
                 var defaultNumberOfColumns = 3;
 
                 var defaults = {
+                    choices: fieldDefinition.Choices, //Come from SharePoint
                     columns: defaultNumberOfColumns,
                     contentUrl: '',
-                    description: null,
+                    description: fieldDefinition.Description, //Comes from SharePoint
+                    displayDescription: false,
                     disabled: false,
                     inputGroupClass: 'col-sm-3',
-                    label: fieldDefinition.label || fieldDefinition.DisplayName,
-                    lookupField: 'title',
+                    label: fieldDefinition.DisplayName, //Comes from SharePoint
+                    /* If extended, a lookup field will have a ShowField property that lets us know which field on the
+                     * source list we're using for the display value.  It's referencing the SharePoint static name
+                     * so we'll need to convert it to caml case.*/
+                    lookupField: fieldDefinition.ShowField ? $filter('inflector')(fieldDefinition.ShowField, 'variable') : 'title',
+                    max: fieldDefinition.Max,
                     maxlength: undefined,
+                    min: fieldDefinition.Min,
                     minlength: undefined,
                     placeholder: null,
-                    required: false,
-                    rows: 6,
+                    required: fieldDefinition.Required || false,
+                    rows: fieldDefinition.NumLines || 6,
                     validationMessage: ''
                 };
 
@@ -90,7 +119,8 @@ angular.module('angularPoint')
                         defaults.contentUrl = 'src/apInputControl.HTML.html';
                         defaultNumberOfColumns = 12;
                         break;
-                    //TODO differentiate integer from number
+                    case 'Currency':
+                    case 'Float': // For calculated columns, stored as float;#value
                     case 'Integer':
                     case 'Number':
                         defaults.contentUrl = 'src/apInputControl.Number.html';
@@ -106,6 +136,7 @@ angular.module('angularPoint')
                         postSetupQueue.push(function() {
                             options.entity[options.fieldName] = options.entity[options.fieldName] || [];
                             exposeLookupOptions(options.entity);
+
                         });
                         defaults.contentUrl = 'src/apInputControl.LookupMulti.html';
                         break;
@@ -122,6 +153,12 @@ angular.module('angularPoint')
 
 
                 var options = _.extend({}, defaults, fieldDefinition, scope);
+
+                /** Put a watch on the field definition object and update options with updated values when changed */
+                scope.$watch('fieldDefinition', function (newVal, oldVal) {
+                    if(!newVal || newVal === oldVal) return;
+                    _.extend(options, newVal);
+                }, true);
 
                 if (!_.isString(options.fieldName)) {
                     throw new Error('Field name is either undefined or not a string.  Ensure you place apostrophe\'s' +
@@ -236,7 +273,7 @@ angular.module('angularPoint')
                 function validate($value) {
                     if (options.validation && _.isFunction(options.validation)) {
                         var val = $value || '';
-                        return options.validation(val, options.entity, options.fieldName);
+                        return options.validation(val, options);
                     } else {
                         return true;
                     }
@@ -252,7 +289,7 @@ angular.module('angularPoint')
                  * @param {*} val Current value of the input.
                  * @returns {boolean} Validation results.
                  */
-                function dateValidation(val) {
+                function dateValidation(val, options) {
                     return val ? _.isDate(val) : true;
                 }
             }
