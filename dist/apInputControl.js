@@ -119,7 +119,8 @@ angular.module('angularPoint')
                         defaults.contentUrl = 'src/apInputControl.HTML.html';
                         defaultNumberOfColumns = 12;
                         break;
-                    //TODO differentiate integer from number
+                    case 'Currency':
+                    case 'Float': // For calculated columns, stored as float;#value
                     case 'Integer':
                     case 'Number':
                         defaults.contentUrl = 'src/apInputControl.Number.html';
