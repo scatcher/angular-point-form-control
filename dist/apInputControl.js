@@ -120,7 +120,7 @@ angular.module('angularPoint')
                         defaultNumberOfColumns = 12;
                         break;
                     case 'Currency':
-                    case 'Float': // For calculated columns, stored as float;#value
+                    case 'Float':
                     case 'Integer':
                     case 'Number':
                         defaults.contentUrl = 'src/apInputControl.Number.html';
