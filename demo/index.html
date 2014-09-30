@@ -71,6 +71,14 @@
                      ap-input-group
                      data-field-definition="field"></div>
             </div>
+            <div class="row" ng-repeat="row in fieldsWithoutGroups">
+                <div class="col-sm-3" ng-repeat="field in row">
+                    <div ap-input-group
+                         data-entity="listItem"
+                         data-field-name="field.fieldName"
+                         data-field-definition="field"></div>
+                </div>
+            </div>
         </form>
     </div>
 </div>

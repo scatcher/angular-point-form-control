@@ -22,6 +22,9 @@
  * on the html element.
  * @param {string} [fieldName=fieldDefinition.fieldName] The name of the property on the entity to bind to.
  * @param {string|function} [groupClass="col-sm-3"] Class to use for the containing element.
+ * @param {boolean} [inputGroup=true] By default we get the input group with label and validation but we have the option
+ * to just get the desired input if set to false.  We're then responsible for putting it in a container, handling the label, managing
+ * validation, and performing any other custom functionality.
  * @param {string} [label=fieldDefinition.label|fieldDefinition.DisplayName] Label for the input.
  * @param {string} [lookupField='title'] The display property to use for a lookup type field.  Typically we do a lookup
  * and use the title but optionally can override with another field name.
@@ -52,6 +55,7 @@ angular.module('angularPoint')
                 fieldDefinition: '=?',
                 fieldName: '=?',
                 groupClass: '=?',
+                inputGroup: '=?',
                 label: '=?',
                 lookupField: '=?',
                 max: '=?',
@@ -66,7 +70,7 @@ angular.module('angularPoint')
             },
             restrict: 'A',
             transclude: true,
-            templateUrl: 'src/apInputGroup.html',
+            templateUrl: 'src/apInputContainer.html',
             link: function (scope, elem, attr) {
 
                 var fieldDefinition = scope.fieldDefinition || getFieldDefinition(scope.entity, scope.fieldName);
@@ -86,6 +90,7 @@ angular.module('angularPoint')
                     description: fieldDefinition.Description, //Comes from SharePoint
                     displayDescription: false,
                     disabled: false,
+                    inputGroup: true,
                     inputGroupClass: 'col-sm-3',
                     label: fieldDefinition.DisplayName, //Comes from SharePoint
                     /* If extended, a lookup field will have a ShowField property that lets us know which field on the
@@ -168,6 +173,11 @@ angular.module('angularPoint')
                 /** Expose to templates */
                 scope.options = options;
                 scope.validate = validate;
+                scope.getPrimaryTemplate = getPrimaryTemplate;
+
+                function getPrimaryTemplate() {
+                    return options.inputGroup ? 'src/apInputGroup.html' : options.contentUrl;
+                }
 
                 /** If the class for the group is a function, set a watch to update the class after changing */
                 if (_.isFunction(options.groupClass)) {
@@ -332,6 +342,11 @@ angular.module('angularPoint')
     }]);
 ;angular.module('angularPoint').run(['$templateCache', function($templateCache) {
   'use strict';
+
+  $templateCache.put('src/apInputContainer.html',
+    "<div ng-include=getPrimaryTemplate()></div>"
+  );
+
 
   $templateCache.put('src/apInputControl.Boolean.html',
     "<button class=\"btn btn-link\" ng-click=\"options.entity[options.fieldName] = !options.entity[options.fieldName]\" ng-disabled=options.disabled><i class=\"fa fa-2x {{ options.entity[options.fieldName] ? 'fa-check-square-o' : 'fa-square-o' }}\"></i></button>  <input type=checkbox class=hidden ng-model=options.entity[options.fieldName] ui-validate=\"'validate($value)'\">"

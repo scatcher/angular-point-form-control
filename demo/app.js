@@ -14,7 +14,7 @@ angular.module('demo', [
     'angularPoint'
 
 ])
-    .config(function(uiSelectConfig) {
+    .config(function (uiSelectConfig) {
         uiSelectConfig.theme = 'bootstrap';
     })
     .controller('demoController', function ($scope) {
@@ -66,7 +66,9 @@ angular.module('demo', [
         };
 
         var fieldDefinitions = getFieldDefinitions();
+        var fieldsWithoutGroups = getFieldsWithoutGroups();
         $scope.fieldDefinitions = fieldDefinitions;
+        $scope.fieldsWithoutGroups = fieldsWithoutGroups;
         $scope.toggleBooleanProperty = toggleBooleanProperty;
         $scope.state = state;
 
@@ -226,7 +228,7 @@ angular.module('demo', [
                         description: 'I\'m a boolean.',
                         objectType: 'Boolean',
                         validation: function (val) {
-                          return val;
+                            return val;
                         },
                         validationMessage: 'I really need to be clicked...'
                     }
@@ -287,10 +289,42 @@ angular.module('demo', [
             ];
         }
 
+        function getFieldsWithoutGroups() {
+            return [
+                [
+                    {
+                        cols: 3,
+                        inputGroup: false,
+                        fieldName: 'validText',
+                        label: 'Valid Text',
+                        description: 'I\'m a text field.'
+                    },
+                    {
+                        cols: 3,
+                        inputGroup: false,
+                        fieldName: 'number',
+                        label: 'Number Input',
+                        objectType: 'Number',
+                        description: 'I\'m a Number field.'
+                    },
+                    {
+                        cols: 3,
+                        fieldName: 'lookupWithoutGroup',
+                        inputGroup: false,
+                        label: 'You shouldn\'t see this.',
+                        description: 'I lookup 1 thing.',
+                        objectType: 'Lookup',
+                        lookupOptions: lookups,
+                        ShowField: 'Custom'
+                    }
+                ]
+            ]
+        }
+
         function toggleBooleanProperty(propertyName) {
             state[propertyName] = !state[propertyName];
-            _.each(fieldDefinitions, function(row) {
-                _.each(row, function(field) {
+            _.each(fieldDefinitions, function (row) {
+                _.each(row, function (field) {
                     field[propertyName] = state[propertyName];
                 });
             });
@@ -298,8 +332,8 @@ angular.module('demo', [
 
         function toggleTextProperty(propertyName) {
             state[propertyName] = !state[propertyName];
-            _.each(fieldDefinitions, function(row) {
-                _.each(row, function(field) {
+            _.each(fieldDefinitions, function (row) {
+                _.each(row, function (field) {
                     field[propertyName] = state[propertyName];
                 });
             });
