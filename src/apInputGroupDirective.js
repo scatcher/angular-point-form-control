@@ -39,6 +39,7 @@
  * @param {function} [validation] Custom validation function that receives 2 parameters
  * [{string} currentValue, {object} options].
  * @param {string} [validationMessage=''] Message to display below input when invalid.
+ * @param {string} [viewport='sm'] Bootstrap viewport size ['xs', 'sm', 'md', 'lg']
  * @restrict A
  * */
 angular.module('angularPoint')
@@ -66,7 +67,8 @@ angular.module('angularPoint')
                 required: '=?',
                 rows: '=?',
                 validation: '=?',
-                validationMessage: '=?'
+                validationMessage: '=?',
+                viewport: '=?'
             },
             restrict: 'A',
             transclude: true,
@@ -104,7 +106,8 @@ angular.module('angularPoint')
                     placeholder: null,
                     required: fieldDefinition.Required || false,
                     rows: fieldDefinition.NumLines || 6,
-                    validationMessage: ''
+                    validationMessage: '',
+                    viewport: 'sm'
                 };
 
                 /** Optionally choose alternative templates based on type */
@@ -225,7 +228,7 @@ angular.module('angularPoint')
                  */
                 function buildColumnBasedClass() {
                     var cols = options.cols || defaultNumberOfColumns;
-                    return 'col-sm-' + cols;
+                    return 'col-' + options.viewport + '-' + cols;
                 }
 
                 /**

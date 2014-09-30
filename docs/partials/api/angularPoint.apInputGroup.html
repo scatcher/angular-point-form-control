@@ -21,6 +21,7 @@ an HTML attribute overrides defaults as well as values stored in the fieldDefini
      field-definition="{object}"
      field-name="{string}"
      group-class="{string|function}"
+     input-group="{boolean}"
      label="{string}"
      lookup-field="{string}"
      max="{number}"
@@ -32,7 +33,8 @@ an HTML attribute overrides defaults as well as values stored in the fieldDefini
      rows="{number}"
      object-type="{string}"
      [validation]="{function}"
-     validation-message="{string}"&gt;
+     validation-message="{string}"
+     viewport="{string}"&gt;
    ...
 &lt;/ANY&gt;</pre>
 <h4 id="usage_parameters">Parameters</h4><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>[choices]</td><td><a href="" class="label type-hint type-hint-string">string[]</a></td><td><div class="angularpoint-apinputgroup-page"><p>Choices to appear in dropdown.  This is automatically added to the
@@ -48,7 +50,10 @@ model with a custom field definition.  Params can be passed in through this obje
 on the html element.</p>
 </div> <p><em>(default: {'Definition from model'})</em></p></td></tr><tr><td>fieldName</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="angularpoint-apinputgroup-page"><p>The name of the property on the entity to bind to.</p>
 </div> <p><em>(default: fieldDefinition.fieldName)</em></p></td></tr><tr><td>groupClass</td><td><a href="" class="label type-hint type-hint-string">string</a><a href="" class="label type-hint type-hint-function">function</a></td><td><div class="angularpoint-apinputgroup-page"><p>Class to use for the containing element.</p>
-</div> <p><em>(default: "col-sm-3")</em></p></td></tr><tr><td>label</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="angularpoint-apinputgroup-page"><p>Label for the input.</p>
+</div> <p><em>(default: "col-sm-3")</em></p></td></tr><tr><td>inputGroup</td><td><a href="" class="label type-hint type-hint-boolean">boolean</a></td><td><div class="angularpoint-apinputgroup-page"><p>By default we get the input group with label and validation but we have the option
+to just get the desired input if set to false.  We&#39;re then responsible for putting it in a container, handling the label, managing
+validation, and performing any other custom functionality.</p>
+</div> <p><em>(default: true)</em></p></td></tr><tr><td>label</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="angularpoint-apinputgroup-page"><p>Label for the input.</p>
 </div> <p><em>(default: fieldDefinition.label|fieldDefinition.DisplayName)</em></p></td></tr><tr><td>lookupField</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="angularpoint-apinputgroup-page"><p>The display property to use for a lookup type field.  Typically we do a lookup
 and use the title but optionally can override with another field name.</p>
 </div> <p><em>(default: 'title')</em></p></td></tr><tr><td>max</td><td><a href="" class="label type-hint type-hint-number">number</a></td><td><div class="angularpoint-apinputgroup-page"><p>Pass through for inputs that can use this attribute.</p>
@@ -62,7 +67,8 @@ and use the title but optionally can override with another field name.</p>
 </div> <p><em>(default: Text)</em></p></td></tr><tr><td>[validation]</td><td><a href="" class="label type-hint type-hint-function">function</a></td><td><div class="angularpoint-apinputgroup-page"><p>Custom validation function that receives 2 parameters
 [{string} currentValue, {object} options].</p>
 </div></td></tr><tr><td>validationMessage</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="angularpoint-apinputgroup-page"><p>Message to display below input when invalid.</p>
-</div> <p><em>(default: '')</em></p></td></tr></tbody></table></div>
+</div> <p><em>(default: '')</em></p></td></tr><tr><td>viewport</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="angularpoint-apinputgroup-page"><p>Bootstrap viewport size [&#39;xs&#39;, &#39;sm&#39;, &#39;md&#39;, &#39;lg&#39;]</p>
+</div> <p><em>(default: 'sm')</em></p></td></tr></tbody></table></div>
 <div class="member method"><h2 id="methods">Methods</h2>
 <ul class="methods"><li><h3 id="methods_buildcolumnbasedclass">buildColumnBasedClass()</h3>
 <div class="buildcolumnbasedclass"><div class="angularpoint-apinputgroup-page angularpoint-apinputgroup-buildcolumnbasedclass-page"><p>Used when a class isn&#39;t specified for the input group.  Using a 12 column
