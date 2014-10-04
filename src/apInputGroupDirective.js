@@ -22,6 +22,7 @@
  * on the html element.
  * @param {string} [fieldName=fieldDefinition.fieldName] The name of the property on the entity to bind to.
  * @param {string|function} [groupClass="col-sm-3"] Class to use for the containing element.
+ * @param {string} [inputClass=""] Class to use on the input element.
  * @param {boolean} [inputGroup=true] By default we get the input group with label and validation but we have the option
  * to just get the desired input if set to false.  We're then responsible for putting it in a container, handling the label, managing
  * validation, and performing any other custom functionality.
@@ -56,6 +57,7 @@ angular.module('angularPoint')
                 fieldDefinition: '=?',
                 fieldName: '=?',
                 groupClass: '=?',
+                inputClass: '=?',
                 inputGroup: '=?',
                 label: '=?',
                 lookupField: '=?',
@@ -92,6 +94,7 @@ angular.module('angularPoint')
                     description: fieldDefinition.Description, //Comes from SharePoint
                     displayDescription: false,
                     disabled: false,
+                    inputClass: '',
                     inputGroup: true,
                     inputGroupClass: 'col-sm-3',
                     label: fieldDefinition.DisplayName, //Comes from SharePoint

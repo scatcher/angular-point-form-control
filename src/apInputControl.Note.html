@@ -1,6 +1,6 @@
 <textarea ng-model="options.entity[options.fieldName]"
           ui-validate="'validate($value)'"
-          class="form-control"
+          class="form-control {{ options.inputClass }}"
           rows="{{options.rows}}"
           ng-required="options.required"
           ng-disabled="options.disabled"

@@ -22,6 +22,7 @@
  * on the html element.
  * @param {string} [fieldName=fieldDefinition.fieldName] The name of the property on the entity to bind to.
  * @param {string|function} [groupClass="col-sm-3"] Class to use for the containing element.
+ * @param {string} [inputClass=""] Class to use on the input element.
  * @param {boolean} [inputGroup=true] By default we get the input group with label and validation but we have the option
  * to just get the desired input if set to false.  We're then responsible for putting it in a container, handling the label, managing
  * validation, and performing any other custom functionality.
@@ -56,6 +57,7 @@ angular.module('angularPoint')
                 fieldDefinition: '=?',
                 fieldName: '=?',
                 groupClass: '=?',
+                inputClass: '=?',
                 inputGroup: '=?',
                 label: '=?',
                 lookupField: '=?',
@@ -92,6 +94,7 @@ angular.module('angularPoint')
                     description: fieldDefinition.Description, //Comes from SharePoint
                     displayDescription: false,
                     disabled: false,
+                    inputClass: '',
                     inputGroup: true,
                     inputGroupClass: 'col-sm-3',
                     label: fieldDefinition.DisplayName, //Comes from SharePoint
@@ -352,55 +355,55 @@ angular.module('angularPoint')
 
 
   $templateCache.put('src/apInputControl.Boolean.html',
-    "<button class=\"btn btn-link\" ng-click=\"options.entity[options.fieldName] = !options.entity[options.fieldName]\" ng-disabled=options.disabled><i class=\"fa fa-2x {{ options.entity[options.fieldName] ? 'fa-check-square-o' : 'fa-square-o' }}\"></i></button>  <input type=checkbox class=hidden ng-model=options.entity[options.fieldName] ui-validate=\"'validate($value)'\">"
+    "<button class=\"btn btn-link {{ options.inputClass }}\" ng-click=\"options.entity[options.fieldName] = !options.entity[options.fieldName]\" ng-disabled=options.disabled><i class=\"fa fa-2x {{ options.entity[options.fieldName] ? 'fa-check-square-o' : 'fa-square-o' }}\"></i></button>  <input type=checkbox class=hidden ng-model=options.entity[options.fieldName] ui-validate=\"'validate($value)'\">"
   );
 
 
   $templateCache.put('src/apInputControl.Choice.html',
-    "<select class=form-control ng-required=options.required ui-validate=\"'validate($value)'\" placeholder=\"{{ options.placeholder }}\" ng-disabled=options.disabled ng-model=options.entity[options.fieldName] ui-validate=\"'validate($value)'\" ng-options=\"choice for choice in options.choices\"></select>"
+    "<select class=\"form-control {{ options.inputClass }}\" ng-required=options.required ui-validate=\"'validate($value)'\" placeholder=\"{{ options.placeholder }}\" ng-disabled=options.disabled ng-model=options.entity[options.fieldName] ui-validate=\"'validate($value)'\" ng-options=\"choice for choice in options.choices\"></select>"
   );
 
 
   $templateCache.put('src/apInputControl.Date.html',
-    "<input ui-date class=form-control ui-validate=\"'validate($value)'\" ng-required=options.required ng-disabled=options.disabled placeholder=\"{{ options.placeholder }}\" ng-model=options.entity[options.fieldName]>"
+    "<input ui-date class=\"form-control {{ options.inputClass }}\" ui-validate=\"'validate($value)'\" ng-required=options.required ng-disabled=options.disabled placeholder=\"{{ options.placeholder }}\" ng-model=options.entity[options.fieldName]>"
   );
 
 
   $templateCache.put('src/apInputControl.HTML.html',
-    "<div text-angular ng-required=options.required ui-validate=\"'validate($value)'\" name=\"{{ options.fieldName }}\" ta-disabled=options.disabled placeholder={{options.placeholder}} ng-model=options.entity[options.fieldName]></div>"
+    "<div text-angular class=\"{{ options.inputClass }}\" ng-required=options.required ui-validate=\"'validate($value)'\" name=\"{{ options.fieldName }}\" ta-disabled=options.disabled placeholder={{options.placeholder}} ng-model=options.entity[options.fieldName]></div>"
   );
 
 
   $templateCache.put('src/apInputControl.Lookup.html',
-    "<div ui-select ng-model=options.entity[options.fieldName] ng-required=options.required ng-disabled=options.disabled><div ui-select-match placeholder=\"{{ options.placeholder }}\">{{ $select.selected[options.lookupField] }}</div><div ui-select-choices data-repeat=\"{'lookupId': lookup.id, 'lookupValue': lookup[options.lookupField]} as\n" +
+    "<div ui-select ng-model=options.entity[options.fieldName] ng-required=options.required ng-disabled=options.disabled class=\"{{ options.inputClass }}\"><div ui-select-match placeholder=\"{{ options.placeholder }}\">{{ $select.selected[options.lookupField] }}</div><div ui-select-choices data-repeat=\"{'lookupId': lookup.id, 'lookupValue': lookup[options.lookupField]} as\n" +
     "lookup in options.lookupArray track by lookup.id \">{{ lookup[options.lookupField] }}</div></div>"
   );
 
 
   $templateCache.put('src/apInputControl.LookupMulti.html',
-    "<div ui-select multiple ng-model=options.entity[options.fieldName] ui-validate=\"'validate($value)'\" ng-required=options.required ng-disabled=options.disabled><div ui-select-match placeholder=\"{{ options.placeholder }}\">{{ $item[options.lookupField] }}</div><div ui-select-choices data-repeat=\"{'lookupId': lookup.id, 'lookupValue': lookup[options.lookupField]} as\n" +
+    "<div ui-select multiple ng-model=options.entity[options.fieldName] ui-validate=\"'validate($value)'\" ng-required=options.required ng-disabled=options.disabled class=\"form-control {{ options.inputClass }}\"><div ui-select-match placeholder=\"{{ options.placeholder }}\">{{ $item[options.lookupField] }}</div><div ui-select-choices data-repeat=\"{'lookupId': lookup.id, 'lookupValue': lookup[options.lookupField]} as\n" +
     "    lookup in options.lookupArray track by lookup.id \">{{ lookup[options.lookupField] }}</div></div>"
   );
 
 
   $templateCache.put('src/apInputControl.MultiChoice.html',
-    "<div ui-select multiple ng-required=options.required ui-validate=\"'validate($value)'\" ng-disabled=options.disabled ng-model=options.entity[options.fieldName] class=form-control><div ui-select-match placeholder=\"{{ options.placeholder }}\">{{ $item }}</div><div ui-select-choices data-repeat=\"choice in options.choices\">{{ choice }}</div></div>"
+    "<div ui-select multiple ng-required=options.required ui-validate=\"'validate($value)'\" ng-disabled=options.disabled ng-model=options.entity[options.fieldName] class=\"form-control {{ options.inputClass }}\"><div ui-select-match placeholder=\"{{ options.placeholder }}\">{{ $item }}</div><div ui-select-choices data-repeat=\"choice in options.choices\">{{ choice }}</div></div>"
   );
 
 
   $templateCache.put('src/apInputControl.Note.html',
-    "<textarea ng-model=options.entity[options.fieldName] ui-validate=\"'validate($value)'\" class=form-control rows={{options.rows}} ng-required=options.required ng-disabled=options.disabled placeholder={{options.placeholder}}>\n" +
+    "<textarea ng-model=options.entity[options.fieldName] ui-validate=\"'validate($value)'\" class=\"form-control {{ options.inputClass }}\" rows={{options.rows}} ng-required=options.required ng-disabled=options.disabled placeholder={{options.placeholder}}>\n" +
     "</textarea>"
   );
 
 
   $templateCache.put('src/apInputControl.Number.html',
-    "<input type=number class=form-control ui-validate=\"'validate($value)'\" ng-model=options.entity[options.fieldName] ng-required=options.required ng-disabled=options.disabled min={{options.min}} max={{options.max}} placeholder={{options.placeholder}}>"
+    "<input type=number class=\"form-control {{ options.inputClass }}\" ui-validate=\"'validate($value)'\" ng-model=options.entity[options.fieldName] ng-required=options.required ng-disabled=options.disabled min={{options.min}} max={{options.max}} placeholder={{options.placeholder}}>"
   );
 
 
   $templateCache.put('src/apInputControl.Text.html',
-    "<input class=form-control ui-validate=\"'validate($value)'\" ng-model=options.entity[options.fieldName] ng-required=options.required ng-disabled=options.disabled ng-minlength=\"{{ options.minlength }}\" ng-maxlength=\"{{ options.maxlength }}\" placeholder={{options.placeholder}}>"
+    "<input class=\"form-control {{ options.inputClass }}\" ui-validate=\"'validate($value)'\" ng-model=options.entity[options.fieldName] ng-required=options.required ng-disabled=options.disabled ng-minlength=\"{{ options.minlength }}\" ng-maxlength=\"{{ options.maxlength }}\" placeholder={{options.placeholder}}>"
   );
 
 
