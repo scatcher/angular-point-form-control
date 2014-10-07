@@ -21,7 +21,8 @@
  * model with a custom field definition.  Params can be passed in through this object or as individual attributes
  * on the html element.
  * @param {string} [fieldName=fieldDefinition.fieldName] The name of the property on the entity to bind to.
- * @param {string|function} [groupClass="col-sm-3"] Class to use for the containing element.
+ * @param {string|function} [groupClass="col-sm-3"] Class to use for the containing element.  If a function is used,
+ * the parameters passed to it are (options.entity[options.fieldName], options.entity, options.fieldName).
  * @param {string} [inputClass=""] Class to use on the input element.
  * @param {boolean} [inputGroup=true] By default we get the input group with label and validation but we have the option
  * to just get the desired input if set to false.  We're then responsible for putting it in a container, handling the label, managing
@@ -214,7 +215,7 @@ angular.module('angularPoint')
                 function evaluateContainerClass() {
                     var groupClass = options.groupClass || buildColumnBasedClass();
                     if (_.isFunction(groupClass)) {
-                        options.inputGroupClass = groupClass();
+                        options.inputGroupClass = groupClass(options.entity[options.fieldName], options.entity, options.fieldName);
                     } else {
                         options.inputGroupClass = groupClass;
                     }
