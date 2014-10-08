@@ -50,7 +50,8 @@ it comes from a node named Choices so we convert to lowercase for consistency wi
 model with a custom field definition.  Params can be passed in through this object or as individual attributes
 on the html element.</p>
 </div> <p><em>(default: {'Definition from model'})</em></p></td></tr><tr><td>fieldName</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="angularpoint-apinputgroup-page"><p>The name of the property on the entity to bind to.</p>
-</div> <p><em>(default: fieldDefinition.fieldName)</em></p></td></tr><tr><td>groupClass</td><td><a href="" class="label type-hint type-hint-string">string</a><a href="" class="label type-hint type-hint-function">function</a></td><td><div class="angularpoint-apinputgroup-page"><p>Class to use for the containing element.</p>
+</div> <p><em>(default: fieldDefinition.fieldName)</em></p></td></tr><tr><td>groupClass</td><td><a href="" class="label type-hint type-hint-string">string</a><a href="" class="label type-hint type-hint-function">function</a></td><td><div class="angularpoint-apinputgroup-page"><p>Class to use for the containing element.  If a function is used,
+the parameters passed to it are (options.entity[options.fieldName], options.entity, options.fieldName).</p>
 </div> <p><em>(default: "col-sm-3")</em></p></td></tr><tr><td>inputClass</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="angularpoint-apinputgroup-page"><p>Class to use on the input element.</p>
 </div> <p><em>(default: "")</em></p></td></tr><tr><td>inputGroup</td><td><a href="" class="label type-hint type-hint-boolean">boolean</a></td><td><div class="angularpoint-apinputgroup-page"><p>By default we get the input group with label and validation but we have the option
 to just get the desired input if set to false.  We&#39;re then responsible for putting it in a container, handling the label, managing

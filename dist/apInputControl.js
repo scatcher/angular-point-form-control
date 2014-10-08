@@ -188,9 +188,9 @@ angular.module('angularPoint')
 
                 /** If the class for the group is a function, set a watch to update the class after changing */
                 if (_.isFunction(options.groupClass)) {
-                    scope.$watch('entity.' + options.fieldName, function () {
+                    scope.$watch('entity', function () {
                         evaluateContainerClass();
-                    });
+                    }, true);
                 }
 
                 /** Set the default field value if empty and the Default is specified */
@@ -376,13 +376,15 @@ angular.module('angularPoint')
 
 
   $templateCache.put('src/apInputControl.Lookup.html',
-    "<div ui-select ng-model=options.entity[options.fieldName] ng-required=options.required ng-disabled=options.disabled class=\"{{ options.inputClass }}\"><div ui-select-match placeholder=\"{{ options.placeholder }}\">{{ $select.selected[options.lookupField] }}</div><div ui-select-choices data-repeat=\"{'lookupId': lookup.id, 'lookupValue': lookup[options.lookupField]} as\n" +
+    "<div ui-select ng-model=options.entity[options.fieldName] ng-required=options.required ng-disabled=options.disabled class=\"{{ options.inputClass }}\"><div ui-select-match placeholder=\"{{ options.placeholder }}\">{{ $select.selected[options.lookupField] }}</div><div ui-select-choices data-repeat=\"{'lookupId': lookup.id, 'lookupValue': lookup[options.lookupField]} as\r" +
+    "\n" +
     "lookup in options.lookupArray track by lookup.id \">{{ lookup[options.lookupField] }}</div></div>"
   );
 
 
   $templateCache.put('src/apInputControl.LookupMulti.html',
-    "<div ui-select multiple ng-model=options.entity[options.fieldName] ui-validate=\"'validate($value)'\" ng-required=options.required ng-disabled=options.disabled class=\"form-control {{ options.inputClass }}\"><div ui-select-match placeholder=\"{{ options.placeholder }}\">{{ $item[options.lookupField] }}</div><div ui-select-choices data-repeat=\"{'lookupId': lookup.id, 'lookupValue': lookup[options.lookupField]} as\n" +
+    "<div ui-select multiple ng-model=options.entity[options.fieldName] ui-validate=\"'validate($value)'\" ng-required=options.required ng-disabled=options.disabled class=\"form-control {{ options.inputClass }}\"><div ui-select-match placeholder=\"{{ options.placeholder }}\">{{ $item[options.lookupField] }}</div><div ui-select-choices data-repeat=\"{'lookupId': lookup.id, 'lookupValue': lookup[options.lookupField]} as\r" +
+    "\n" +
     "    lookup in options.lookupArray track by lookup.id \">{{ lookup[options.lookupField] }}</div></div>"
   );
 
@@ -393,7 +395,8 @@ angular.module('angularPoint')
 
 
   $templateCache.put('src/apInputControl.Note.html',
-    "<textarea ng-model=options.entity[options.fieldName] ui-validate=\"'validate($value)'\" class=\"form-control {{ options.inputClass }}\" rows={{options.rows}} ng-required=options.required ng-disabled=options.disabled placeholder={{options.placeholder}}>\n" +
+    "<textarea ng-model=options.entity[options.fieldName] ui-validate=\"'validate($value)'\" class=\"form-control {{ options.inputClass }}\" rows={{options.rows}} ng-required=options.required ng-disabled=options.disabled placeholder={{options.placeholder}}>\r" +
+    "\n" +
     "</textarea>"
   );
 

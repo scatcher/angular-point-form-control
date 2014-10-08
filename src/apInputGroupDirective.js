@@ -188,9 +188,9 @@ angular.module('angularPoint')
 
                 /** If the class for the group is a function, set a watch to update the class after changing */
                 if (_.isFunction(options.groupClass)) {
-                    scope.$watch('entity.' + options.fieldName, function () {
+                    scope.$watch('entity', function () {
                         evaluateContainerClass();
-                    });
+                    }, true);
                 }
 
                 /** Set the default field value if empty and the Default is specified */
