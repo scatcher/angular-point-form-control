@@ -79,7 +79,9 @@ angular.module('demo', [
                         cols: 3,
                         fieldName: 'validText',
                         label: 'Valid Text',
-                        description: 'I\'m a text field.'
+                        description: 'I\'m a text field.',
+                        maxlength: 3
+
                     },
                     {
                         cols: 3,
@@ -231,7 +233,15 @@ angular.module('demo', [
                             return val;
                         },
                         validationMessage: 'I really need to be clicked...'
+                    },
+                    {
+                        cols: 3,
+                        fieldName: 'currency',
+                        label: 'Currency Input',
+                        objectType: 'Currency',
+                        description: 'I\'m a Currency field.'
                     }
+
                 ],
                 [
                     {

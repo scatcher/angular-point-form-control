@@ -1,0 +1,15 @@
+<div class="input-group">
+    <span class="input-group-addon"><i class="fa fa-dollar"></i> </span>
+    <input type="number"
+           class="form-control {{ options.inputClass }}"
+           ui-validate="'validate($value)'"
+           ng-model="options.entity[options.fieldName]"
+           ng-required="options.required"
+           ng-disabled="options.disabled"
+           ng-minlength="{{ options.minlength }}"
+           ng-maxlength="{{ options.maxlength }}"
+           min="{{options.min}}"
+           max="{{options.max}}"
+           placeholder="{{options.placeholder}}">
+</div>
+

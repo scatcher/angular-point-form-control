@@ -132,6 +132,9 @@ angular.module('angularPoint')
                         defaultNumberOfColumns = 12;
                         break;
                     case 'Currency':
+                        defaults.contentUrl = 'src/apInputControl.Currency.html';
+                        defaults.validationMessage = 'Only numbers and decimal place accepted.';
+                        break;
                     case 'Float':
                     case 'Integer':
                     case 'Number':
@@ -159,6 +162,8 @@ angular.module('angularPoint')
                         defaultNumberOfColumns = 12;
                         defaults.contentUrl = 'src/apInputControl.Note.html';
                         break;
+                    case 'Text':
+                        defaults.maxlength = 255;
                     default:
                         defaults.contentUrl = 'src/apInputControl.Text.html';
                 }
@@ -365,6 +370,11 @@ angular.module('angularPoint')
   );
 
 
+  $templateCache.put('src/apInputControl.Currency.html',
+    "<div class=input-group><span class=input-group-addon><i class=\"fa fa-dollar\"></i></span> <input type=number class=\"form-control {{ options.inputClass }}\" ui-validate=\"'validate($value)'\" ng-model=options.entity[options.fieldName] ng-required=options.required ng-disabled=options.disabled ng-minlength=\"{{ options.minlength }}\" ng-maxlength=\"{{ options.maxlength }}\" min={{options.min}} max={{options.max}} placeholder={{options.placeholder}}></div>"
+  );
+
+
   $templateCache.put('src/apInputControl.Date.html',
     "<input ui-date class=\"form-control {{ options.inputClass }}\" ui-validate=\"'validate($value)'\" ng-required=options.required ng-disabled=options.disabled placeholder=\"{{ options.placeholder }}\" ng-model=options.entity[options.fieldName]>"
   );
@@ -376,15 +386,13 @@ angular.module('angularPoint')
 
 
   $templateCache.put('src/apInputControl.Lookup.html',
-    "<div ui-select ng-model=options.entity[options.fieldName] ng-required=options.required ng-disabled=options.disabled class=\"{{ options.inputClass }}\"><div ui-select-match placeholder=\"{{ options.placeholder }}\">{{ $select.selected[options.lookupField] }}</div><div ui-select-choices data-repeat=\"{'lookupId': lookup.id, 'lookupValue': lookup[options.lookupField]} as\r" +
-    "\n" +
+    "<div ui-select ng-model=options.entity[options.fieldName] ng-required=options.required ng-disabled=options.disabled class=\"{{ options.inputClass }}\"><div ui-select-match placeholder=\"{{ options.placeholder }}\">{{ $select.selected[options.lookupField] }}</div><div ui-select-choices data-repeat=\"{'lookupId': lookup.id, 'lookupValue': lookup[options.lookupField]} as\n" +
     "lookup in options.lookupArray track by lookup.id \">{{ lookup[options.lookupField] }}</div></div>"
   );
 
 
   $templateCache.put('src/apInputControl.LookupMulti.html',
-    "<div ui-select multiple ng-model=options.entity[options.fieldName] ui-validate=\"'validate($value)'\" ng-required=options.required ng-disabled=options.disabled class=\"form-control {{ options.inputClass }}\"><div ui-select-match placeholder=\"{{ options.placeholder }}\">{{ $item[options.lookupField] }}</div><div ui-select-choices data-repeat=\"{'lookupId': lookup.id, 'lookupValue': lookup[options.lookupField]} as\r" +
-    "\n" +
+    "<div ui-select multiple ng-model=options.entity[options.fieldName] ui-validate=\"'validate($value)'\" ng-required=options.required ng-disabled=options.disabled class=\"form-control {{ options.inputClass }}\"><div ui-select-match placeholder=\"{{ options.placeholder }}\">{{ $item[options.lookupField] }}</div><div ui-select-choices data-repeat=\"{'lookupId': lookup.id, 'lookupValue': lookup[options.lookupField]} as\n" +
     "    lookup in options.lookupArray track by lookup.id \">{{ lookup[options.lookupField] }}</div></div>"
   );
 
@@ -395,14 +403,13 @@ angular.module('angularPoint')
 
 
   $templateCache.put('src/apInputControl.Note.html',
-    "<textarea ng-model=options.entity[options.fieldName] ui-validate=\"'validate($value)'\" class=\"form-control {{ options.inputClass }}\" rows={{options.rows}} ng-required=options.required ng-disabled=options.disabled placeholder={{options.placeholder}}>\r" +
-    "\n" +
+    "<textarea ng-model=options.entity[options.fieldName] ui-validate=\"'validate($value)'\" class=\"form-control {{ options.inputClass }}\" rows={{options.rows}} ng-required=options.required ng-disabled=options.disabled placeholder={{options.placeholder}}>\n" +
     "</textarea>"
   );
 
 
   $templateCache.put('src/apInputControl.Number.html',
-    "<input type=number class=\"form-control {{ options.inputClass }}\" ui-validate=\"'validate($value)'\" ng-model=options.entity[options.fieldName] ng-required=options.required ng-disabled=options.disabled min={{options.min}} max={{options.max}} placeholder={{options.placeholder}}>"
+    "<input type=number class=\"form-control {{ options.inputClass }}\" ui-validate=\"'validate($value)'\" ng-model=options.entity[options.fieldName] ng-required=options.required ng-disabled=options.disabled min={{options.min}} max={{options.max}} ng-minlength=\"{{ options.minlength }}\" ng-maxlength=\"{{ options.maxlength }}\" placeholder={{options.placeholder}}>"
   );
 
 

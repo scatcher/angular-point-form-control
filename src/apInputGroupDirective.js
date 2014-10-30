@@ -132,6 +132,9 @@ angular.module('angularPoint')
                         defaultNumberOfColumns = 12;
                         break;
                     case 'Currency':
+                        defaults.contentUrl = 'src/apInputControl.Currency.html';
+                        defaults.validationMessage = 'Only numbers and decimal place accepted.';
+                        break;
                     case 'Float':
                     case 'Integer':
                     case 'Number':
@@ -159,6 +162,8 @@ angular.module('angularPoint')
                         defaultNumberOfColumns = 12;
                         defaults.contentUrl = 'src/apInputControl.Note.html';
                         break;
+                    case 'Text':
+                        defaults.maxlength = 255;
                     default:
                         defaults.contentUrl = 'src/apInputControl.Text.html';
                 }
