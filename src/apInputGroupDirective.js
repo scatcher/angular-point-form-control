@@ -30,6 +30,7 @@
  * @param {string} [label=fieldDefinition.label|fieldDefinition.DisplayName] Label for the input.
  * @param {string} [lookupField='title'] The display property to use for a lookup type field.  Typically we do a lookup
  * and use the title but optionally can override with another field name.
+ * @param {array} [lookupOptions] Pass in an array of items to be used as options for a select or multi-select.
  * @param {number} max Pass through for inputs that can use this attribute.
  * @param {number} maxlength Pass through for inputs that can use this attribute.
  * @param {number} min Pass through for inputs that can use this attribute.
@@ -149,9 +150,7 @@ angular.module('angularPoint')
                         break;
                     case 'LookupMulti':
                         postSetupQueue.push(function() {
-                            options.entity[options.fieldName] = options.entity[options.fieldName] || [];
                             exposeLookupOptions(options.entity);
-
                         });
                         defaults.contentUrl = 'src/apInputControl.LookupMulti.html';
                         break;
@@ -161,6 +160,18 @@ angular.module('angularPoint')
                     case 'Note':
                         defaultNumberOfColumns = 12;
                         defaults.contentUrl = 'src/apInputControl.Note.html';
+                        break;
+                    case 'User':
+                        postSetupQueue.push(function() {
+                            createLookupArray();
+                        });
+                        defaults.contentUrl = 'src/apInputControl.Lookup.html';
+                        break;
+                    case 'UserMulti':
+                        postSetupQueue.push(function() {
+                            createLookupArray();
+                        });
+                        defaults.contentUrl = 'src/apInputControl.LookupMulti.html';
                         break;
                     case 'Text':
                         defaults.maxlength = 255;
@@ -260,10 +271,15 @@ angular.module('angularPoint')
                             }
                         }
                     }
+                    createLookupArray();
+                }
 
-                    /** Need to be formatted as an array */
-                    options.lookupArray = _.isArray(options.lookupOptions) ?
-                        options.lookupOptions : _.toArray(options.lookupOptions);
+                function createLookupArray() {
+                    /** Create a lookupValue/lookupId formatted array for ui-select */
+                    options.lookupArray = [];
+                    _.each(options.lookupOptions, function(option) {
+                        options.lookupArray.push({lookupValue: option[options.lookupField], lookupId: option.id});
+                    });
                 }
 
                 /**

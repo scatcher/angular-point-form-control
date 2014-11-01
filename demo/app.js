@@ -18,26 +18,7 @@ angular.module('demo', [
         uiSelectConfig.theme = 'bootstrap';
     })
     .controller('demoController', function ($scope) {
-        $scope.listItem = {
-            text: 'This is some text.',
-            number: 33,
-            note: 'Hello world',
-            date: new Date(),
-            emptyDate: null,
-            invalidDate: 'some text',
-            html: '<div>I\'m HTML</div>',
-            choice: 'Choice 1',
-            multiChoice: null,
-            singleLookup: '',
-            multipleLookup: null,
-            choice2: null,
-            anotherLookup: null,
-            validationText: 'cccca',
-            validationNumber: 9,
-            invalidChoice: 'Choice 1'
-        };
-
-        var choices = ['Choice 1', 'Choice 2', 'Choice 3'];
+        var mockChoices = ['Choice 1', 'Choice 2', 'Choice 3'];
 
         var state = {
             displayDescription: false,
@@ -47,7 +28,7 @@ angular.module('demo', [
             placeholder: false
         };
 
-        var lookups = {
+        var mockIndexedCache = {
             1: {
                 title: 'Lookup 1',
                 custom: 'Custom Lookup Value 1',
@@ -64,6 +45,62 @@ angular.module('demo', [
                 id: 3
             }
         };
+
+        $scope.listItem = {
+            text: 'This is some text.',
+            number: 33,
+            note: 'Hello world',
+            date: new Date(),
+            emptyDate: null,
+            invalidDate: 'some text',
+            html: '<div>I\'m HTML</div>',
+            choice: 'Choice 1',
+            singleLookup: '',
+            multipleLookupSet: [{lookupId: 3, lookupValue: 'Lookup 3'}],
+            //multipleLookupSet: [{lookupId: 2, lookupValue: 'Lookup 2'}, {lookupId: 3, lookupValue: 'Lookup 3'}],
+            choice2: null,
+            multiChoice: ['Choice 2', 'Choice 3'],
+            anotherLookup: null,
+            validationText: 'cccca',
+            validationNumber: 9,
+            invalidChoice: 'Choice 1',
+            //user: mockUserArray[1]
+            user: {lookupId: 2, lookupValue: 'Sam'}
+        };
+
+        var mockChoices = ['Choice 1', 'Choice 2', 'Choice 3'];
+
+        var state = {
+            displayDescription: false,
+            required: false,
+            disabled: false,
+            validation: false,
+            placeholder: false
+        };
+
+        var mockIndexedCache = {
+            1: {
+                title: 'Lookup 1',
+                custom: 'Custom Lookup Value 1',
+                id: 1
+            },
+            2: {
+                title: 'Lookup 2',
+                custom: 'Custom Lookup Value 2',
+                id: 2
+            },
+            3: {
+                title: 'Lookup 3',
+                custom: 'Custom Lookup Value 3',
+                id: 3
+            }
+        };
+
+        var mockUserArray = [
+            {Name: 'Bob', id:1},
+            {Name: 'Sam', id:2},
+            {Name: 'Jane', id:3}
+        ];
 
         var fieldDefinitions = getFieldDefinitions();
         var fieldsWithoutGroups = getFieldsWithoutGroups();
@@ -179,7 +216,7 @@ angular.module('demo', [
                         label: 'Choice',
                         description: 'I\'m a simple select.',
                         objectType: 'Choice',
-                        Choices: choices
+                        Choices: mockChoices
                     },
                     {
                         cols: 3,
@@ -187,7 +224,7 @@ angular.module('demo', [
                         label: 'Required Single Choice',
                         description: 'i am a choice',
                         objectType: 'Choice',
-                        Choices: choices,
+                        Choices: mockChoices,
                         required: true
                     },
                     {
@@ -196,7 +233,7 @@ angular.module('demo', [
                         label: 'Another Single Choice',
                         description: 'i am a choice',
                         objectType: 'Choice',
-                        Choices: choices,
+                        Choices: mockChoices,
                         validation: function (val, entity, propertyName) {
                             return val === 'Choice 2';
                         },
@@ -208,7 +245,7 @@ angular.module('demo', [
                         label: 'Disabled Choice',
                         description: 'i am a choice',
                         objectType: 'Choice',
-                        Choices: choices,
+                        Choices: mockChoices,
                         placeholder: 'I\'m soooo disabled...',
                         disabled: true
                     }
@@ -221,7 +258,7 @@ angular.module('demo', [
                         required: true,
                         description: 'I\'m a multi choice select.',
                         objectType: 'MultiChoice',
-                        Choices: choices
+                        Choices: mockChoices
                     },
                     {
                         cols: 3,
@@ -240,8 +277,16 @@ angular.module('demo', [
                         label: 'Currency Input',
                         objectType: 'Currency',
                         description: 'I\'m a Currency field.'
+                    },
+                    {
+                        cols: 3,
+                        fieldName: 'user',
+                        label: 'User',
+                        description: 'I\'m a user select.',
+                        objectType: 'User',
+                        lookupOptions: mockUserArray,
+                        lookupField: 'Name'
                     }
-
                 ],
                 [
                     {
@@ -250,7 +295,7 @@ angular.module('demo', [
                         label: 'Single Lookup',
                         description: 'I\'m a simple lookup.',
                         objectType: 'Lookup',
-                        lookupOptions: lookups
+                        lookupOptions: mockIndexedCache
                     },
                     {
                         cols: 3,
@@ -258,18 +303,18 @@ angular.module('demo', [
                         label: 'Another Single Lookup',
                         description: 'I lookup 1 thing.',
                         objectType: 'Lookup',
-                        lookupOptions: lookups,
+                        lookupOptions: mockIndexedCache,
                         ShowField: 'Custom'
                     }
                 ],
                 [
                     {
                         cols: 3,
-                        fieldName: 'multipleLookup',
+                        fieldName: 'multipleLookupSet',
                         label: 'Multiple Lookup',
                         description: 'I lookup multiple things.',
                         objectType: 'LookupMulti',
-                        lookupOptions: lookups
+                        lookupOptions: mockIndexedCache
                     }
 
                 ],
@@ -324,7 +369,7 @@ angular.module('demo', [
                         label: 'You shouldn\'t see this.',
                         description: 'I lookup 1 thing.',
                         objectType: 'Lookup',
-                        lookupOptions: lookups,
+                        lookupOptions: mockIndexedCache,
                         ShowField: 'Custom'
                     }
                 ]

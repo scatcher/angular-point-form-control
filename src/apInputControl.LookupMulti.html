@@ -4,7 +4,6 @@
         ng-required="options.required"
         ng-disabled="options.disabled"
         class="form-control {{ options.inputClass }}">
-    <div ui-select-match placeholder="{{ options.placeholder }}">{{ $item[options.lookupField] }}</div>
-    <div ui-select-choices data-repeat="{'lookupId': lookup.id, 'lookupValue': lookup[options.lookupField]} as
-    lookup in options.lookupArray track by lookup.id ">{{ lookup[options.lookupField] }}</div>
+    <div ui-select-match placeholder="{{ options.placeholder }}">{{ $item.lookupValue }}</div>
+    <div ui-select-choices data-repeat="lookup in options.lookupArray">{{ lookup.lookupValue }}</div>
 </div>
