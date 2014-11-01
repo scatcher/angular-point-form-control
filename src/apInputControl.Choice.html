@@ -1,8 +1,9 @@
-<select class="form-control  {{ options.inputClass }}"
-        ng-required="options.required"
-        ui-validate="'validate($value)'"
-        placeholder="{{ options.placeholder }}"
-        ng-disabled="options.disabled"
-        ng-model="options.entity[options.fieldName]"
-        ui-validate="'validate($value)'"
-        ng-options="choice for choice in options.choices"></select>
+<div ui-select
+     ng-required="options.required"
+     ui-validate="'validate($value)'"
+     ng-disabled="options.disabled"
+     ng-model="options.entity[options.fieldName]"
+     class="{{ options.inputClass }}">
+    <div ui-select-match placeholder="{{ options.placeholder }}">{{ $select.selected }}</div>
+    <div ui-select-choices data-repeat="choice in options.choices | filter:$select.search">{{ choice }}</div>
+</div>

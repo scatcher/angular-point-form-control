@@ -1,4 +1,17 @@
-'use strict';
+(function () {
+    'use strict';
+
+    angular
+        .module('angularPoint')
+        .constant('apInputConstants', {
+            defaultNumberOfColumns: 3,
+            defaultNumberOfRows: 6,
+            defaultTextAreaColumns: 12,
+            defaultViewportSize: 'sm'
+        });
+
+})();
+;'use strict';
 
 /**
  * @ngdoc directive
@@ -46,7 +59,7 @@
  * @restrict A
  * */
 angular.module('angularPoint')
-    .directive('apInputGroup', ["_", "apCacheService", "$filter", function (_, apCacheService, $filter) {
+    .directive('apInputGroup', ["_", "apCacheService", "$filter", "apInputConstants", function (_, apCacheService, $filter, apInputConstants) {
         return {
             scope: {
                 /** Optionally specify the number of columns for this form group directly instead of using model */
@@ -87,11 +100,9 @@ angular.module('angularPoint')
                 /** Called after setup for post processing */
                 var postSetupQueue = [evaluateContainerClass];
 
-                var defaultNumberOfColumns = 3;
-
                 var defaults = {
                     choices: fieldDefinition.Choices, //Come from SharePoint
-                    columns: defaultNumberOfColumns,
+                    columns: apInputConstants.defaultNumberOfColumns,
                     contentUrl: '',
                     description: fieldDefinition.Description, //Comes from SharePoint
                     displayDescription: false,
@@ -110,9 +121,9 @@ angular.module('angularPoint')
                     minlength: undefined,
                     placeholder: null,
                     required: fieldDefinition.Required || false,
-                    rows: fieldDefinition.NumLines || 6,
+                    rows: fieldDefinition.NumLines || apInputConstants.defaultNumberOfRows,
                     validationMessage: '',
-                    viewport: 'sm'
+                    viewport: apInputConstants.defaultViewportSize
                 };
 
                 /** Optionally choose alternative templates based on type */
@@ -130,7 +141,7 @@ angular.module('angularPoint')
                         break;
                     case 'HTML':
                         defaults.contentUrl = 'src/apInputControl.HTML.html';
-                        defaultNumberOfColumns = 12;
+                        defaults.columns = apInputConstants.defaultTextAreaColumns;
                         break;
                     case 'Currency':
                         defaults.contentUrl = 'src/apInputControl.Currency.html';
@@ -158,7 +169,7 @@ angular.module('angularPoint')
                         defaults.contentUrl = 'src/apInputControl.MultiChoice.html';
                         break;
                     case 'Note':
-                        defaultNumberOfColumns = 12;
+                        defaults.columns = apInputConstants.defaultTextAreaColumns;
                         defaults.contentUrl = 'src/apInputControl.Note.html';
                         break;
                     case 'User':
@@ -247,7 +258,7 @@ angular.module('angularPoint')
                  * @returns {string} Bootstrap class name.
                  */
                 function buildColumnBasedClass() {
-                    var cols = options.cols || defaultNumberOfColumns;
+                    var cols = options.cols || apInputConstants.defaultNumberOfColumns;
                     return 'col-' + options.viewport + '-' + cols;
                 }
 
@@ -382,7 +393,7 @@ angular.module('angularPoint')
 
 
   $templateCache.put('src/apInputControl.Choice.html',
-    "<select class=\"form-control {{ options.inputClass }}\" ng-required=options.required ui-validate=\"'validate($value)'\" placeholder=\"{{ options.placeholder }}\" ng-disabled=options.disabled ng-model=options.entity[options.fieldName] ui-validate=\"'validate($value)'\" ng-options=\"choice for choice in options.choices\"></select>"
+    "<div ui-select ng-required=options.required ui-validate=\"'validate($value)'\" ng-disabled=options.disabled ng-model=options.entity[options.fieldName] class=\"{{ options.inputClass }}\"><div ui-select-match placeholder=\"{{ options.placeholder }}\">{{ $select.selected }}</div><div ui-select-choices data-repeat=\"choice in options.choices | filter:$select.search\">{{ choice }}</div></div>"
   );
 
 
@@ -402,17 +413,17 @@ angular.module('angularPoint')
 
 
   $templateCache.put('src/apInputControl.Lookup.html',
-    "<div ui-select ng-model=options.entity[options.fieldName] ng-required=options.required ng-disabled=options.disabled class=\"{{ options.inputClass }}\"><div ui-select-match placeholder=\"{{ options.placeholder }}\">{{ $select.selected.lookupValue}}</div><div ui-select-choices data-repeat=\"lookup in options.lookupArray track by lookup.lookupId \">{{ lookup.lookupValue }}</div></div>"
+    "<div ui-select ng-model=options.entity[options.fieldName] ng-required=options.required ng-disabled=options.disabled class=\"{{ options.inputClass }}\"><div ui-select-match placeholder=\"{{ options.placeholder }}\">{{ $select.selected.lookupValue}}</div><div ui-select-choices data-repeat=\"lookup in options.lookupArray | filter:{lookupValue: $select.search} track by lookup.lookupId\">{{ lookup.lookupValue }}</div></div>"
   );
 
 
   $templateCache.put('src/apInputControl.LookupMulti.html',
-    "<div ui-select multiple ng-model=options.entity[options.fieldName] ui-validate=\"'validate($value)'\" ng-required=options.required ng-disabled=options.disabled class=\"form-control {{ options.inputClass }}\"><div ui-select-match placeholder=\"{{ options.placeholder }}\">{{ $item.lookupValue }}</div><div ui-select-choices data-repeat=\"lookup in options.lookupArray\">{{ lookup.lookupValue }}</div></div>"
+    "<div ui-select multiple ng-model=options.entity[options.fieldName] ui-validate=\"'validate($value)'\" ng-required=options.required ng-disabled=options.disabled class=\"{{ options.inputClass }}\"><div ui-select-match placeholder=\"{{ options.placeholder }}\">{{ $item.lookupValue }}</div><div ui-select-choices data-repeat=\"lookup in options.lookupArray | filter:{lookupValue: $select.search} track by lookup.lookupId\">{{ lookup.lookupValue }}</div></div>"
   );
 
 
   $templateCache.put('src/apInputControl.MultiChoice.html',
-    "<div ui-select multiple ng-required=options.required ui-validate=\"'validate($value)'\" ng-disabled=options.disabled ng-model=options.entity[options.fieldName] class=\"form-control {{ options.inputClass }}\"><div ui-select-match placeholder=\"{{ options.placeholder }}\">{{ $item }}</div><div ui-select-choices data-repeat=\"choice in options.choices\">{{ choice }}</div></div>"
+    "<div ui-select multiple ng-required=options.required ui-validate=\"'validate($value)'\" ng-disabled=options.disabled ng-model=options.entity[options.fieldName] class=\"{{ options.inputClass }}\"><div ui-select-match placeholder=\"{{ options.placeholder }}\">{{ $item }}</div><div ui-select-choices data-repeat=\"choice in options.choices | filter:$select.search\">{{ choice }}</div></div>"
   );
 
 

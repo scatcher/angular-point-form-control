@@ -25,6 +25,7 @@ an HTML attribute overrides defaults as well as values stored in the fieldDefini
      input-group="{boolean}"
      label="{string}"
      lookup-field="{string}"
+     [lookup-options]="{array}"
      max="{number}"
      maxlength="{number}"
      min="{number}"
@@ -59,7 +60,8 @@ validation, and performing any other custom functionality.</p>
 </div> <p><em>(default: true)</em></p></td></tr><tr><td>label</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="angularpoint-apinputgroup-page"><p>Label for the input.</p>
 </div> <p><em>(default: fieldDefinition.label|fieldDefinition.DisplayName)</em></p></td></tr><tr><td>lookupField</td><td><a href="" class="label type-hint type-hint-string">string</a></td><td><div class="angularpoint-apinputgroup-page"><p>The display property to use for a lookup type field.  Typically we do a lookup
 and use the title but optionally can override with another field name.</p>
-</div> <p><em>(default: 'title')</em></p></td></tr><tr><td>max</td><td><a href="" class="label type-hint type-hint-number">number</a></td><td><div class="angularpoint-apinputgroup-page"><p>Pass through for inputs that can use this attribute.</p>
+</div> <p><em>(default: 'title')</em></p></td></tr><tr><td>[lookupOptions]</td><td><a href="" class="label type-hint type-hint-array">array</a></td><td><div class="angularpoint-apinputgroup-page"><p>Pass in an array of items to be used as options for a select or multi-select.</p>
+</div></td></tr><tr><td>max</td><td><a href="" class="label type-hint type-hint-number">number</a></td><td><div class="angularpoint-apinputgroup-page"><p>Pass through for inputs that can use this attribute.</p>
 </div></td></tr><tr><td>maxlength</td><td><a href="" class="label type-hint type-hint-number">number</a></td><td><div class="angularpoint-apinputgroup-page"><p>Pass through for inputs that can use this attribute.</p>
 </div></td></tr><tr><td>min</td><td><a href="" class="label type-hint type-hint-number">number</a></td><td><div class="angularpoint-apinputgroup-page"><p>Pass through for inputs that can use this attribute.</p>
 </div></td></tr><tr><td>minlength</td><td><a href="" class="label type-hint type-hint-number">number</a></td><td><div class="angularpoint-apinputgroup-page"><p>Pass through for inputs that can use this attribute.</p>

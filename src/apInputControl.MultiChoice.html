@@ -3,7 +3,7 @@
         ui-validate="'validate($value)'"
         ng-disabled="options.disabled"
         ng-model="options.entity[options.fieldName]"
-        class="form-control {{ options.inputClass }}">
+        class="{{ options.inputClass }}">
     <div ui-select-match placeholder="{{ options.placeholder }}">{{ $item }}</div>
-    <div ui-select-choices data-repeat="choice in options.choices">{{ choice }}</div>
+    <div ui-select-choices data-repeat="choice in options.choices | filter:$select.search">{{ choice }}</div>
 </div>

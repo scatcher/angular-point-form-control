@@ -4,5 +4,5 @@
      ng-disabled="options.disabled"
      class="{{ options.inputClass }}">
     <div ui-select-match placeholder="{{ options.placeholder }}">{{ $select.selected.lookupValue}}</div>
-    <div ui-select-choices data-repeat="lookup in options.lookupArray track by lookup.lookupId ">{{ lookup.lookupValue }}</div>
+    <div ui-select-choices data-repeat="lookup in options.lookupArray | filter:{lookupValue: $select.search} track by lookup.lookupId">{{ lookup.lookupValue }}</div>
 </div>

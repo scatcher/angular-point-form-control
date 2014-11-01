@@ -46,7 +46,7 @@
  * @restrict A
  * */
 angular.module('angularPoint')
-    .directive('apInputGroup', function (_, apCacheService, $filter) {
+    .directive('apInputGroup', function (_, apCacheService, $filter, apInputConstants) {
         return {
             scope: {
                 /** Optionally specify the number of columns for this form group directly instead of using model */
@@ -87,11 +87,9 @@ angular.module('angularPoint')
                 /** Called after setup for post processing */
                 var postSetupQueue = [evaluateContainerClass];
 
-                var defaultNumberOfColumns = 3;
-
                 var defaults = {
                     choices: fieldDefinition.Choices, //Come from SharePoint
-                    columns: defaultNumberOfColumns,
+                    columns: apInputConstants.defaultNumberOfColumns,
                     contentUrl: '',
                     description: fieldDefinition.Description, //Comes from SharePoint
                     displayDescription: false,
@@ -110,9 +108,9 @@ angular.module('angularPoint')
                     minlength: undefined,
                     placeholder: null,
                     required: fieldDefinition.Required || false,
-                    rows: fieldDefinition.NumLines || 6,
+                    rows: fieldDefinition.NumLines || apInputConstants.defaultNumberOfRows,
                     validationMessage: '',
-                    viewport: 'sm'
+                    viewport: apInputConstants.defaultViewportSize
                 };
 
                 /** Optionally choose alternative templates based on type */
@@ -130,7 +128,7 @@ angular.module('angularPoint')
                         break;
                     case 'HTML':
                         defaults.contentUrl = 'src/apInputControl.HTML.html';
-                        defaultNumberOfColumns = 12;
+                        defaults.columns = apInputConstants.defaultTextAreaColumns;
                         break;
                     case 'Currency':
                         defaults.contentUrl = 'src/apInputControl.Currency.html';
@@ -158,7 +156,7 @@ angular.module('angularPoint')
                         defaults.contentUrl = 'src/apInputControl.MultiChoice.html';
                         break;
                     case 'Note':
-                        defaultNumberOfColumns = 12;
+                        defaults.columns = apInputConstants.defaultTextAreaColumns;
                         defaults.contentUrl = 'src/apInputControl.Note.html';
                         break;
                     case 'User':
@@ -247,7 +245,7 @@ angular.module('angularPoint')
                  * @returns {string} Bootstrap class name.
                  */
                 function buildColumnBasedClass() {
-                    var cols = options.cols || defaultNumberOfColumns;
+                    var cols = options.cols || apInputConstants.defaultNumberOfColumns;
                     return 'col-' + options.viewport + '-' + cols;
                 }
 

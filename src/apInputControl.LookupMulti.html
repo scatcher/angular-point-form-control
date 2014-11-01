@@ -3,7 +3,7 @@
         ui-validate="'validate($value)'"
         ng-required="options.required"
         ng-disabled="options.disabled"
-        class="form-control {{ options.inputClass }}">
+        class="{{ options.inputClass }}">
     <div ui-select-match placeholder="{{ options.placeholder }}">{{ $item.lookupValue }}</div>
-    <div ui-select-choices data-repeat="lookup in options.lookupArray">{{ lookup.lookupValue }}</div>
+    <div ui-select-choices data-repeat="lookup in options.lookupArray | filter:{lookupValue: $select.search} track by lookup.lookupId">{{ lookup.lookupValue }}</div>
 </div>
