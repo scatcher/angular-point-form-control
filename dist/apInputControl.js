@@ -444,7 +444,7 @@ angular.module('angularPoint')
 
 
   $templateCache.put('src/apInputGroup.html',
-    "<div class={{options.inputGroupClass}} ng-form=apInput><div class=form-group title={{options.description}} ng-class=\"{'has-error': apInput.$invalid}\"><label class=control-label>{{ options.label }} {{options.required ? '*' : ''}}</label><div ng-include=options.contentUrl ng-disabled=ngDisabled></div><span class=help-text ng-if=options.displayDescription>{{ options.description }}</span> <span class=text-danger ng-if=apInput.$invalid>{{ options.validationMessage }}</span></div></div>"
+    "<div class={{options.inputGroupClass}} ng-form=apInput><div class=form-group title={{options.description}} ng-class=\"{'has-error': apInput.$invalid}\"><label class=control-label>{{ options.label }} {{options.required ? '*' : ''}}</label><div ng-include=options.contentUrl></div><span class=help-text ng-if=options.displayDescription>{{ options.description }}</span> <span class=text-danger ng-if=apInput.$invalid>{{ options.validationMessage }}</span></div></div>"
   );
 
 
