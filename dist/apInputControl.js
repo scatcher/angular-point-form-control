@@ -428,7 +428,7 @@ angular.module('angularPoint')
 
 
   $templateCache.put('src/apInputControl.Note.html',
-    "<textarea ng-model=options.entity[options.fieldName] ui-validate=\"'validate($value)'\" class=\"form-control {{ options.inputClass }}\" rows={{options.rows}} ng-required=options.required ng-disabled=options.disabled placeholder={{options.placeholder}}>\n" +
+    "<textarea msd-elastic ng-model=options.entity[options.fieldName] ui-validate=\"'validate($value)'\" class=\"form-control {{ options.inputClass }}\" rows={{options.rows}} ng-required=options.required ng-disabled=options.disabled placeholder={{options.placeholder}}>\n" +
     "</textarea>"
   );
 

@@ -1,40 +1,41 @@
 {
-  "name": "angular-point-form-control",
-  "version": "0.1.15",
-  "homepage": "https://github.com/scatcher/angular-point-form-control",
-  "authors": [
-    "Scott Hatcher <scott@hatcher.solutions>"
-  ],
-  "description": "A directive built to simplify angular-point form controls.",
-  "main": "dist/apInputControl.min.js",
-  "dependencies": {
-    "angular": "~1.2",
-    "angular-point": "^1.0.0",
-    "angular-ui-date": "~0.0.4",
-    "angular-ui-select": "^0.8.0",
-    "angular-ui-utils": "^0.1.1",
-    "bootstrap": "^3.2.0",
-    "font-awesome": "~4.2.0",
-    "jquery": "~1.11",
-    "jquery-ui": "1.11.0",
-    "lodash": "^2.4",
-    "textAngular": "^1.2"
-  },
-  "devDependencies": {
-    "angular-sanitize": "~1.2",
-    "angular-mocks": "~1.2",
-    "angular-point-form-control": "latest",
-    "angular-point-ie-safe": "https://github.com/scatcher/angular-point-ie-safe.git#master"
-  },
-  "keywords": [
-    "angular-point"
-  ],
-  "license": "MIT",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ]
+    "name": "angular-point-form-control",
+    "version": "0.1.16",
+    "homepage": "https://github.com/scatcher/angular-point-form-control",
+    "authors": [
+        "Scott Hatcher <scott@hatcher.solutions>"
+    ],
+    "description": "A directive built to simplify angular-point form controls.",
+    "main": "dist/apInputControl.min.js",
+    "dependencies": {
+        "angular": "~1.2",
+        "angular-point": "^1.0.0",
+        "angular-ui-date": "~0.0.4",
+        "angular-ui-select": "^0.8.0",
+        "angular-ui-utils": "^0.1.1",
+        "bootstrap": "^3.2.0",
+        "font-awesome": "~4.2.0",
+        "jquery": "~1.11",
+        "jquery-ui": "1.11.0",
+        "lodash": "^2.4",
+        "angular-elastic": "~2.4.0",
+        "textAngular": "^1.2"
+    },
+    "devDependencies": {
+        "angular-sanitize": "~1.2",
+        "angular-mocks": "~1.2",
+        "angular-point-form-control": "latest",
+        "angular-point-ie-safe": "https://github.com/scatcher/angular-point-ie-safe.git#master"
+    },
+    "keywords": [
+        "angular-point"
+    ],
+    "license": "MIT",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ]
 }
