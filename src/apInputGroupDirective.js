@@ -63,6 +63,7 @@ angular.module('angularPoint')
                 inputGroup: '=?',
                 label: '=?',
                 lookupField: '=?',
+                lookupOptions: '=?',
                 max: '=?',
                 maxlength: '=?',
                 min: '=?',
@@ -260,7 +261,7 @@ angular.module('angularPoint')
                  * @param {object} entity List item.
                  */
                 function exposeLookupOptions(entity) {
-                    if(!options.lookupOptions) {
+                    if(!options.lookupOptions && !scope.lookupOptions) {
                         var lookupListGuid = options.List;
                         if (lookupListGuid) {
                             options.lookupOptions = apCacheService.getCachedEntities(lookupListGuid);
@@ -275,7 +276,8 @@ angular.module('angularPoint')
                 function createLookupArray() {
                     /** Create a lookupValue/lookupId formatted array for ui-select */
                     options.lookupArray = [];
-                    _.each(options.lookupOptions, function(option) {
+                    var lookupOptions = options.lookupOptions ? options.lookupOptions : scope.lookupOptions;
+                    _.each(lookupOptions, function(option) {
                         options.lookupArray.push({lookupValue: option[options.lookupField], lookupId: option.id});
                     });
                 }
