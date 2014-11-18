@@ -80,142 +80,161 @@ angular.module('angularPoint')
             templateUrl: 'src/apInputContainer.html',
             link: function (scope, elem, attr) {
 
-                var fieldDefinition = scope.fieldDefinition || getFieldDefinition(scope.entity, scope.fieldName);
+                var fieldDefinition,
+                    options = {},
+                    /** Called after setup for post processing */
+                    postSetupQueue = [evaluateContainerClass],
+                    state = {
+                        initialized: false
+                    };
 
-                if (!_.isObject(fieldDefinition)) {
-                    throw new Error('apInputGroup requires a valid field definition object', scope);
-                }
-                /** Called after setup for post processing */
-                var postSetupQueue = [evaluateContainerClass];
-
-                var defaults = {
-                    choices: fieldDefinition.Choices, //Come from SharePoint
-                    columns: apInputConstants.defaultNumberOfColumns,
-                    contentUrl: '',
-                    description: fieldDefinition.Description, //Comes from SharePoint
-                    displayDescription: false,
-                    disabled: false,
-                    inputClass: '',
-                    inputGroup: true,
-                    inputGroupClass: 'col-sm-3',
-                    label: fieldDefinition.DisplayName, //Comes from SharePoint
-                    /* If extended, a lookup field will have a ShowField property that lets us know which field on the
-                     * source list we're using for the display value.  It's referencing the SharePoint static name
-                     * so we'll need to convert it to caml case.*/
-                    lookupField: fieldDefinition.ShowField ? $filter('inflector')(fieldDefinition.ShowField, 'variable') : 'title',
-                    max: fieldDefinition.Max,
-                    maxlength: undefined,
-                    min: fieldDefinition.Min,
-                    minlength: undefined,
-                    placeholder: null,
-                    required: fieldDefinition.Required || false,
-                    rows: fieldDefinition.NumLines || apInputConstants.defaultNumberOfRows,
-                    validationMessage: '',
-                    viewport: apInputConstants.defaultViewportSize
-                };
-
-                /** Optionally choose alternative templates based on type */
-                switch (fieldDefinition.objectType) {
-                    case 'Boolean':
-                        defaults.contentUrl = 'src/apInputControl.Boolean.html';
-                        break;
-                    case 'Choice':
-                        defaults.contentUrl = 'src/apInputControl.Choice.html';
-                        break;
-                    case 'DateTime':
-                        defaults.contentUrl = 'src/apInputControl.Date.html';
-                        defaults.validation = defaults.validation || dateValidation;
-                        defaults.validationMessage = 'Please enter a valid date.';
-                        break;
-                    case 'HTML':
-                        defaults.contentUrl = 'src/apInputControl.HTML.html';
-                        defaults.columns = apInputConstants.defaultTextAreaColumns;
-                        break;
-                    case 'Currency':
-                        defaults.contentUrl = 'src/apInputControl.Currency.html';
-                        defaults.validationMessage = 'Only numbers and decimal place accepted.';
-                        break;
-                    case 'Float':
-                    case 'Integer':
-                    case 'Number':
-                        defaults.contentUrl = 'src/apInputControl.Number.html';
-                        defaults.validationMessage = 'Not a valid number!';
-                        break;
-                    case 'Lookup':
-                        postSetupQueue.push(function() {
-                            exposeLookupOptions(options.entity);
-                        });
-                        defaults.contentUrl = 'src/apInputControl.Lookup.html';
-                        break;
-                    case 'LookupMulti':
-                        postSetupQueue.push(function() {
-                            exposeLookupOptions(options.entity);
-                        });
-                        defaults.contentUrl = 'src/apInputControl.LookupMulti.html';
-                        break;
-                    case 'MultiChoice':
-                        defaults.contentUrl = 'src/apInputControl.MultiChoice.html';
-                        break;
-                    case 'Note':
-                        defaults.columns = apInputConstants.defaultTextAreaColumns;
-                        defaults.contentUrl = 'src/apInputControl.Note.html';
-                        break;
-                    case 'User':
-                        postSetupQueue.push(function() {
-                            createLookupArray();
-                        });
-                        defaults.contentUrl = 'src/apInputControl.Lookup.html';
-                        break;
-                    case 'UserMulti':
-                        postSetupQueue.push(function() {
-                            createLookupArray();
-                        });
-                        defaults.contentUrl = 'src/apInputControl.LookupMulti.html';
-                        break;
-                    case 'Text':
-                        defaults.maxlength = 255;
-                    default:
-                        defaults.contentUrl = 'src/apInputControl.Text.html';
+                if (scope.fieldDefinition) {
+                    fieldDefinition = scope.fieldDefinition;
+                    activate();
+                    state.initialized = true;
+                } else {
+                    /** Ensure list item is available before attempting to lookup field definition from entity */
+                    scope.$watch('entity', function (newVal, oldVal) {
+                        if (newVal && !state.initialized) {
+                            fieldDefinition = getFieldDefinition(scope.entity, scope.fieldName);
+                            activate();
+                            state.initialized = true;
+                        }
+                    });
                 }
 
 
-                var options = _.extend({}, defaults, fieldDefinition, scope);
+                function activate() {
+                    if (!_.isObject(fieldDefinition)) {
+                        throw new Error('apInputGroup requires a valid field definition object', scope);
+                    }
 
-                /** Put a watch on the field definition object and update options with updated values when changed */
-                scope.$watch('fieldDefinition', function (newVal, oldVal) {
-                    if(!newVal || newVal === oldVal) return;
-                    _.extend(options, newVal);
-                }, true);
+                    var defaults = {
+                        choices: fieldDefinition.Choices || fieldDefinition.choices, //Come from SharePoint or manually entered
+                        columns: apInputConstants.defaultNumberOfColumns,
+                        contentUrl: '',
+                        description: fieldDefinition.Description || fieldDefinition.description, //Comes from SharePoint or manually entered
+                        displayDescription: false,
+                        disabled: false,
+                        inputClass: '',
+                        inputGroup: true,
+                        inputGroupClass: 'col-sm-3',
+                        label: fieldDefinition.DisplayName || fieldDefinition.displayName, //Comes from SharePoint
+                        /* If extended, a lookup field will have a ShowField property that lets us know which field on the
+                         * source list we're using for the display value.  It's referencing the SharePoint static name
+                         * so we'll need to convert it to caml case.*/
+                        lookupField: fieldDefinition.ShowField ? $filter('inflector')(fieldDefinition.ShowField, 'variable') : 'title',
+                        max: fieldDefinition.Max,
+                        maxlength: undefined,
+                        min: fieldDefinition.Min,
+                        minlength: undefined,
+                        placeholder: null,
+                        required: fieldDefinition.Required || false,
+                        rows: fieldDefinition.NumLines || apInputConstants.defaultNumberOfRows,
+                        validationMessage: '',
+                        viewport: apInputConstants.defaultViewportSize
+                    };
 
-                if (!_.isString(options.fieldName)) {
-                    throw new Error('Field name is either undefined or not a string.  Ensure you place apostrophe\'s' +
-                    ' inside the quotes when identifying data-field-name.');
-                }
+                    /** Optionally choose alternative templates based on type */
+                    switch (fieldDefinition.objectType) {
+                        case 'Boolean':
+                            defaults.contentUrl = 'src/apInputControl.Boolean.html';
+                            break;
+                        case 'Choice':
+                            defaults.contentUrl = 'src/apInputControl.Choice.html';
+                            break;
+                        case 'DateTime':
+                            defaults.contentUrl = 'src/apInputControl.Date.html';
+                            defaults.validation = defaults.validation || dateValidation;
+                            defaults.validationMessage = 'Please enter a valid date.';
+                            break;
+                        case 'HTML':
+                            defaults.contentUrl = 'src/apInputControl.HTML.html';
+                            defaults.columns = apInputConstants.defaultTextAreaColumns;
+                            break;
+                        case 'Currency':
+                            defaults.contentUrl = 'src/apInputControl.Currency.html';
+                            defaults.validationMessage = 'Only numbers and decimal place accepted.';
+                            break;
+                        case 'Float':
+                        case 'Integer':
+                        case 'Number':
+                            defaults.contentUrl = 'src/apInputControl.Number.html';
+                            defaults.validationMessage = 'Not a valid number!';
+                            break;
+                        case 'Lookup':
+                            postSetupQueue.push(function () {
+                                exposeLookupOptions(options.entity);
+                            });
+                            defaults.contentUrl = 'src/apInputControl.Lookup.html';
+                            break;
+                        case 'LookupMulti':
+                            postSetupQueue.push(function () {
+                                exposeLookupOptions(options.entity);
+                            });
+                            defaults.contentUrl = 'src/apInputControl.LookupMulti.html';
+                            break;
+                        case 'MultiChoice':
+                            defaults.contentUrl = 'src/apInputControl.MultiChoice.html';
+                            break;
+                        case 'Note':
+                            defaults.columns = apInputConstants.defaultTextAreaColumns;
+                            defaults.contentUrl = 'src/apInputControl.Note.html';
+                            break;
+                        case 'User':
+                            postSetupQueue.push(function () {
+                                createLookupArray();
+                            });
+                            defaults.contentUrl = 'src/apInputControl.Lookup.html';
+                            break;
+                        case 'UserMulti':
+                            postSetupQueue.push(function () {
+                                createLookupArray();
+                            });
+                            defaults.contentUrl = 'src/apInputControl.LookupMulti.html';
+                            break;
+                        case 'Text':
+                            defaults.maxlength = 255;
+                        default:
+                            defaults.contentUrl = 'src/apInputControl.Text.html';
+                    }
 
-                /** Expose to templates */
-                scope.options = options;
-                scope.validate = validate;
-                scope.getPrimaryTemplate = getPrimaryTemplate;
 
-                function getPrimaryTemplate() {
-                    return options.inputGroup ? 'src/apInputGroup.html' : options.contentUrl;
-                }
+                    options = _.extend({}, defaults, fieldDefinition, scope);
 
-                /** If the class for the group is a function, set a watch to update the class after changing */
-                if (_.isFunction(options.groupClass)) {
-                    scope.$watch('entity', function () {
-                        evaluateContainerClass();
+                    /** Put a watch on the field definition object and update options with updated values when changed */
+                    scope.$watch('fieldDefinition', function (newVal, oldVal) {
+                        if (!newVal || newVal === oldVal) return;
+                        _.extend(options, newVal);
                     }, true);
-                }
 
-                /** Set the default field value if empty and the Default is specified */
-                if (!options.entity[options.fieldName] && options.Default) {
-                    options.entity[options.fieldName] = options.Default;
-                }
+                    if (!_.isString(options.fieldName)) {
+                        throw new Error('Field name is either undefined or not a string.  Ensure you place apostrophe\'s' +
+                        ' inside the quotes when identifying data-field-name.');
+                    }
 
-                _.each(postSetupQueue, function(process) {
-                    process();
-                });
+                    /** Expose to templates */
+                    scope.options = options;
+                    scope.validate = validate;
+                    scope.getPrimaryTemplate = getPrimaryTemplate;
+
+                    /** If the class for the group is a function, set a watch to update the class after changing */
+                    if (_.isFunction(options.groupClass)) {
+                        scope.$watch('entity', function () {
+                            evaluateContainerClass();
+                        }, true);
+                    }
+
+                    /** Set the default field value if empty and the Default is specified */
+                    if (!options.entity[options.fieldName] && options.Default) {
+                        options.entity[options.fieldName] = options.Default;
+                    }
+
+                    _.each(postSetupQueue, function (process) {
+                        process();
+                    });
+
+                }
 
 
                 /**======================PRIVATE============================*/
@@ -261,7 +280,7 @@ angular.module('angularPoint')
                  * @param {object} entity List item.
                  */
                 function exposeLookupOptions(entity) {
-                    if(!options.lookupOptions && !scope.lookupOptions) {
+                    if (!options.lookupOptions && !scope.lookupOptions) {
                         var lookupListGuid = options.List;
                         if (lookupListGuid) {
                             options.lookupOptions = apCacheService.getCachedEntities(lookupListGuid);
@@ -277,9 +296,13 @@ angular.module('angularPoint')
                     /** Create a lookupValue/lookupId formatted array for ui-select */
                     options.lookupArray = [];
                     var lookupOptions = options.lookupOptions ? options.lookupOptions : scope.lookupOptions;
-                    _.each(lookupOptions, function(option) {
+                    _.each(lookupOptions, function (option) {
                         options.lookupArray.push({lookupValue: option[options.lookupField], lookupId: option.id});
                     });
+                }
+
+                function getPrimaryTemplate() {
+                    return options.inputGroup ? 'src/apInputGroup.html' : options.contentUrl;
                 }
 
                 /**
@@ -292,7 +315,7 @@ angular.module('angularPoint')
                  * @returns {Object} Field definition defined in the model for that list.
                  */
                 function getFieldDefinition(entity, fieldName) {
-                    if(!entity || !fieldName) {
+                    if (!entity || !fieldName) {
                         throw new Error('An entity and fieldName are both required on the directive if' +
                         'a fieldDefinition isn\'t specified.')
                     }
