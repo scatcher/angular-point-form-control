@@ -294,10 +294,9 @@ angular.module('angularPoint')
 
                 function createLookupArray() {
                     /** Create a lookupValue/lookupId formatted array for ui-select */
-                    options.lookupArray = [];
                     var lookupOptions = options.lookupOptions ? options.lookupOptions : scope.lookupOptions;
-                    _.each(lookupOptions, function (option) {
-                        options.lookupArray.push({lookupValue: option[options.lookupField], lookupId: option.id});
+                    options.lookupArray = _.map(lookupOptions, function (lookup) {
+                        return {lookupValue: lookup[options.lookupField], lookupId: lookup.id};
                     });
                 }
 
