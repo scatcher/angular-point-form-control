@@ -114,7 +114,7 @@ module.exports = function (grunt) {
                 options: {
                     module: 'angularPoint',
                     htmlmin: {
-                        collapseBooleanAttributes: true,
+                        collapseBooleanAttributes: false,
                         collapseWhitespace: true,
                         removeAttributeQuotes: true,
                         removeComments: true, // Only if you don't use comment directives!

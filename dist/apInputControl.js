@@ -307,10 +307,9 @@ angular.module('angularPoint')
 
                 function createLookupArray() {
                     /** Create a lookupValue/lookupId formatted array for ui-select */
-                    options.lookupArray = [];
                     var lookupOptions = options.lookupOptions ? options.lookupOptions : scope.lookupOptions;
-                    _.each(lookupOptions, function (option) {
-                        options.lookupArray.push({lookupValue: option[options.lookupField], lookupId: option.id});
+                    options.lookupArray = _.map(lookupOptions, function (lookup) {
+                        return {lookupValue: lookup[options.lookupField], lookupId: lookup.id};
                     });
                 }
 
@@ -443,7 +442,7 @@ angular.module('angularPoint')
 
 
   $templateCache.put('src/apInputControl.LookupMulti.html',
-    "<div ui-select multiple ng-model=options.entity[options.fieldName] ui-validate=\"'validate($value)'\" ng-required=options.required ng-disabled=options.disabled class=\"{{ options.inputClass }}\"><div ui-select-match placeholder=\"{{ options.placeholder }}\">{{ $item.lookupValue }}</div><div ui-select-choices data-repeat=\"lookup in options.lookupArray | filter:{lookupValue: $select.search} track by lookup.lookupId\">{{ lookup.lookupValue }}</div></div>"
+    "<div ui-select multiple=multiple ng-model=options.entity[options.fieldName] ui-validate=\"'validate($value)'\" ng-required=options.required ng-disabled=options.disabled class=\"{{ options.inputClass }}\"><div ui-select-match placeholder=\"{{ options.placeholder }}\">{{ $item.lookupValue }}</div><div ui-select-choices data-repeat=\"lookup in options.lookupArray | filter:{lookupValue: $select.search} track by lookup.lookupId\">{{ lookup.lookupValue }}</div></div>"
   );
 
 
