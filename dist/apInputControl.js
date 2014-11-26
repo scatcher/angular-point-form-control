@@ -442,7 +442,7 @@ angular.module('angularPoint')
 
 
   $templateCache.put('src/apInputControl.LookupMulti.html',
-    "<div ui-select multiple=multiple ng-model=options.entity[options.fieldName] ui-validate=\"'validate($value)'\" ng-required=options.required ng-disabled=options.disabled class=\"{{ options.inputClass }}\"><div ui-select-match placeholder=\"{{ options.placeholder }}\">{{ $item.lookupValue }}</div><div ui-select-choices data-repeat=\"lookup in options.lookupArray | filter:{lookupValue: $select.search} track by lookup.lookupId\">{{ lookup.lookupValue }}</div></div>"
+    "<div ui-select multiple ng-model=options.entity[options.fieldName] ui-validate=\"'validate($value)'\" ng-required=options.required ng-disabled=options.disabled class=\"{{ options.inputClass }}\"><div ui-select-match placeholder=\"{{ options.placeholder }}\">{{ $item.lookupValue }}</div><div ui-select-choices data-repeat=\"lookup in options.lookupArray | filter:{lookupValue: $select.search} track by lookup.lookupId\">{{ lookup.lookupValue }}</div></div>"
   );
 
 
