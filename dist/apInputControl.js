@@ -108,7 +108,8 @@ angular.module('angularPoint')
                 } else {
                     /** Ensure list item is available before attempting to lookup field definition from entity */
                     scope.$watch('entity', function (newVal, oldVal) {
-                        if (newVal && !state.initialized) {
+                        /** Initialize and then only process again if the underlying entity changes */
+                        if (newVal && !state.initialized || !angular.equals(newVal)) {
                             fieldDefinition = getFieldDefinition(scope.entity, scope.fieldName);
                             activate();
                             state.initialized = true;
@@ -412,7 +413,7 @@ angular.module('angularPoint')
 
 
   $templateCache.put('src/apInputControl.Boolean.html',
-    "<button class=\"btn btn-link {{ options.inputClass }}\" ng-click=\"options.entity[options.fieldName] = !options.entity[options.fieldName]\" ng-disabled=options.disabled><i class=\"fa fa-2x {{ options.entity[options.fieldName] ? 'fa-check-square-o' : 'fa-square-o' }}\"></i></button>  <input type=checkbox class=hidden ng-model=options.entity[options.fieldName] ui-validate=\"'validate($value)'\">"
+    "<button class=\"btn btn-link {{ options.inputClass }}\" ng-click=\"options.entity[options.fieldName] = !options.entity[options.fieldName]\" ng-disabled=options.disabled><i class=\"fa fa-2x {{ options.entity[options.fieldName] ? 'fa-check-square-o' : 'fa-square-o' }}\"></i></button> <input type=checkbox class=hidden ng-model=options.entity[options.fieldName] ui-validate=\"'validate($value)'\">"
   );
 
 

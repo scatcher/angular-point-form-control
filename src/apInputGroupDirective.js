@@ -95,7 +95,8 @@ angular.module('angularPoint')
                 } else {
                     /** Ensure list item is available before attempting to lookup field definition from entity */
                     scope.$watch('entity', function (newVal, oldVal) {
-                        if (newVal && !state.initialized) {
+                        /** Initialize and then only process again if the underlying entity changes */
+                        if (newVal && !state.initialized || !angular.equals(newVal)) {
                             fieldDefinition = getFieldDefinition(scope.entity, scope.fieldName);
                             activate();
                             state.initialized = true;
